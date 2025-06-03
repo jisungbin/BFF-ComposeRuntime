@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package protobuf.source.screen;
+
+import "action/action.proto";
+import "attributes/attributes.proto";
+import "section/section.proto";
+
+message Screen {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_ROOT = 1;
+    TYPE_BOTTOM_SHEET = 2;
+  }
+
+  string id = 1;
+  repeated attributes.Attributes attributes = 2;
+  repeated action.Action actions = 3;
+
+  Type type = 4;
+
+  repeated section.Section sections = 5;
+}

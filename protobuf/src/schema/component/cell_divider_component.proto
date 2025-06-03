@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package protobuf.source.component;
+
+import "component/component_base.proto";
+
+message CellDividerComponent {
+  enum Style {
+    STYLE_UNSPECIFIED = 0;
+    STYLE_LIST = 1;
+    STYLE_SECTION = 2;
+  }
+
+  ComponentBase base = 1;
+  Style style = 2;
+}

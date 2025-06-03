@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package protobuf.source.component;
+
+enum CellColor {
+  CELL_COLOR_UNSPECIFIED = 0;
+  CELL_COLOR_WHITE = 1;
+  CELL_COLOR_BLACK = 2;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package protobuf.source.response;
+
+import "screen/screen.proto";
+import "widget/widget.proto";
+
+message Response {
+  message Error {
+    string code = 1;
+    string message = 2;
+  }
+
+  repeated screen.Screen screens = 1;
+  repeated widget.Widget widgets = 2;
+  optional Error error = 3;
+}

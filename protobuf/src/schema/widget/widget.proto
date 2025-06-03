@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package protobuf.source.widget;
+
+import "action/action.proto";
+import "attributes/attributes.proto";
+import "widget/search_hospital_a_widget_content.proto";
+import "widget/cell_divider_widget_content.proto";
+
+message Widget {
+  string id = 1;
+  repeated attributes.Attributes attributes = 2;
+  repeated action.Action actions = 3;
+
+  bool is_sticky = 4;
+
+  oneof content {
+    widget.SearchHospitalAWidgetContent search_hospital_a = 1000;
+    widget.CellDividerWidgetContent cell_divider = 2000;
+  }
+}

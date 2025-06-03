@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package protobuf.source.action;
+
+message Action {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_URI_SCHEME = 1;
+    TYPE_LOGGING = 2;
+  }
+
+  enum TriggerCondition {
+    TRIGGER_CONDITION_UNSPECIFIED = 0;
+    TRIGGER_CONDITION_TAP = 1;
+    TRIGGER_CONDITION_IMMEDIATE = 2;
+    TRIGGER_CONDITION_EXIT_VIEW_ONCE = 3;
+  }
+
+  string id = 1;
+  Type type = 2;
+  TriggerCondition trigger_condition = 3;
+  optional string uri_scheme = 4;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package protobuf.source.component;
+
+import "action/action.proto";
+import "attributes/attributes.proto";
+
+message ComponentBase {
+  string id = 1;
+  repeated attributes.Attributes attributes = 2;
+  repeated action.Action actions = 3;
+}

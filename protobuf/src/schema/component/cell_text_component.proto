@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package protobuf.source.component;
+
+import "component/cell_color.proto";
+import "component/cell_text_style.proto";
+import "component/component_base.proto";
+
+message CellTextComponent {
+  ComponentBase base = 1;
+  CellTextStyle style = 2;
+  CellColor color = 3;
+
+  string text = 4;
+}

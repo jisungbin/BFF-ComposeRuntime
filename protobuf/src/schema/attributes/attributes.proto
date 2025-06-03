@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package protobuf.source.attributes;
+
+message Attributes {
+  message OffsetAttribute {
+    optional float top = 1;
+    optional float leading = 2;
+    optional float bottom = 3;
+    optional float trailing = 4;
+  }
+
+  message BorderAttribute {
+    float width = 1;
+  }
+
+  oneof type {
+    OffsetAttribute offset = 1;
+    BorderAttribute border = 2;
+  }
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package protobuf.source.widget;
+
+import "action/action.proto";
+import "attributes/attributes.proto";
+import "component/cell_text_component.proto";
+
+message SearchHospitalAWidgetContent {
+  message EventChildWidget {
+    string id = 1;
+    repeated attributes.Attributes attributes = 2;
+    repeated action.Action actions = 3;
+
+    optional component.CellTextComponent title = 4;
+    optional component.CellTextComponent cost = 5;
+  }
+
+  optional component.CellTextComponent hospital_name = 1;
+  optional component.CellTextComponent info_text = 2;
+  repeated EventChildWidget event_items = 3;
+}

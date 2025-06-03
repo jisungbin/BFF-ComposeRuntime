@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package protobuf.source.section;
+
+import "action/action.proto";
+import "attributes/attributes.proto";
+import "widget/widget.proto";
+
+message Section {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_HEADER = 1;
+    TYPE_BODY = 2;
+    TYPE_FOOTER = 3;
+  }
+
+  enum StackDirection {
+    STACK_DIRECTION_UNSPECIFIED = 0;
+    STACK_DIRECTION_VERTICAL = 1;
+    STACK_DIRECTION_HORIZONTAL = 2;
+  }
+
+  string id = 1;
+  repeated attributes.Attributes attributes = 2;
+  repeated action.Action actions = 3;
+
+  Type type = 4;
+  StackDirection stack_direction = 5;
+
+  repeated widget.Widget widgets = 6;
+}

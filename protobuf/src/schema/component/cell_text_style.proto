@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package protobuf.source.component;
+
+enum CellTextStyle {
+  CELL_TEXT_STYLE_UNSPECIFIED = 0;
+  CELL_TEXT_STYLE_BOLD = 1;
+  CELL_TEXT_STYLE_MEDIUM = 2;
+  CELL_TEXT_STYLE_REGULAR = 3;
+}
