@@ -2,19 +2,31 @@ package protobuf.generator
 
 import com.squareup.wire.WireLogger
 import com.squareup.wire.schema.KotlinTarget
-import com.squareup.wire.schema.Location
+import com.squareup.wire.schema.ProtoType
 import com.squareup.wire.schema.WireRun
-import java.io.File
 import okio.FileSystem
+import okio.Path
 
-private val projectDir = File(System.getProperty("user.dir"))
-internal val PROTO_SOURCE_PATH = Location.get(projectDir.resolve("protobuf/src/schema").path)
+internal object ProtobufKotlinGenerator {
+  internal fun generate() {
+    WireRun(
+      sourcePath = listOf(PROTO_SOURCE_PATH),
+      targets = listOf(KotlinTarget(outDirectory = projectDir.resolve("protobuf/src/main/kotlin").path)),
+    )
+      .execute(FileSystem.SYSTEM, Logger())
+  }
 
-internal fun main() {
-  WireRun(
-    sourcePath = listOf(PROTO_SOURCE_PATH),
-    targets = listOf(KotlinTarget(outDirectory = projectDir.resolve("protobuf/src/main/kotlin").path)),
-  )
-    .execute(FileSystem.SYSTEM, WireLogger.NONE)
+  private class Logger : WireLogger {
+    override fun artifactHandled(outputPath: Path, qualifiedName: String, targetName: String) {
+      val artifactName = qualifiedName.substringAfterLast('.')
+      val fullOutputPath = outputPath.resolve(qualifiedName.replace('.', '/') + ".kt")
+      println("Generated $artifactName in $fullOutputPath")
+    }
+
+    override fun artifactSkipped(type: ProtoType, targetName: String) = Unit
+    override fun unusedRoots(unusedRoots: Set<String>) = Unit
+    override fun unusedPrunes(unusedPrunes: Set<String>) = Unit
+    override fun unusedIncludesInTarget(unusedIncludes: Set<String>) = Unit
+    override fun unusedExcludesInTarget(unusedExcludes: Set<String>) = Unit
+  }
 }
-

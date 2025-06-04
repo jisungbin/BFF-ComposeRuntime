@@ -3,19 +3,28 @@ syntax = "proto3";
 package protobuf.source.attributes;
 
 message Attributes {
-  message OffsetAttribute {
+  enum SizeArea {
+    SIZE_AREA_UNSPECIFIED = 0;
+    SIZE_AREA_WIDTH = 1;
+    SIZE_AREA_HEIGHT = 2;
+  }
+
+  message PaddingAttribute {
     optional float top = 1;
     optional float leading = 2;
     optional float bottom = 3;
     optional float trailing = 4;
   }
 
-  message BorderAttribute {
-    float width = 1;
+  message SizeAttribute {
+    Attributes.SizeArea area = 1;
+    optional float min_value = 2;
+    float default_value = 3;
+    optional float max_value = 4;
   }
 
   oneof type {
-    OffsetAttribute offset = 1;
-    BorderAttribute border = 2;
+    PaddingAttribute padding = 1;
+    SizeAttribute size = 2;
   }
 }

@@ -26,6 +26,7 @@ message Section {
 
   Type type = 4;
   StackDirection stack_direction = 5;
+  optional string debug_name = 6;
 
-  repeated widget.Widget widgets = 6;
+  repeated widget.Widget widgets = 7;
 }

@@ -1,15 +1,16 @@
-package bffui.composeruntime.poc.schema
+package bff.ui.attribute
 
 import androidx.collection.IntObjectMap
 import androidx.collection.MutableObjectList
 import androidx.collection.ObjectList
 import androidx.collection.mutableObjectListOf
 import androidx.collection.objectListOf
+import dev.drewhamilton.poko.Poko
 
-sealed interface Attributes {
-  val value: ObjectList<Attribute>
+public sealed interface Attributes {
+  public val value: ObjectList<Attribute>
 
-  companion object : Attributes {
+  public companion object : Attributes {
     override val value: ObjectList<Attribute> get() = objectListOf()
   }
 }
@@ -18,12 +19,13 @@ private class MutableAttributes : Attributes {
   override val value: MutableObjectList<Attribute> = mutableObjectListOf()
 }
 
-sealed interface Attribute {
-  val name: Int
-  val arguments: IntObjectMap<Any>
-}
+@Poko public class Attribute internal constructor(
+  public val index: Int,
+  public val arguments: IntObjectMap<Any>,
+  internal var id: Int? = null,
+)
 
-infix fun Attributes.then(other: Attribute): Attributes {
+public infix fun Attributes.then(other: Attribute): Attributes {
   val backing = this as? MutableAttributes ?: MutableAttributes()
   backing.value.add(other)
   return backing

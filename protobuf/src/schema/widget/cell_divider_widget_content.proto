@@ -3,7 +3,10 @@ syntax = "proto3";
 package protobuf.source.widget;
 
 import "component/cell_divider_component.proto";
+import "component/cell_color.proto";
 
 message CellDividerWidgetContent {
   component.CellDividerComponent divider = 1;
+  component.CellColor color = 2;
+  optional string debug_name = 3;
 }

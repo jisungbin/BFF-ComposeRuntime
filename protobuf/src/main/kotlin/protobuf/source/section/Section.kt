@@ -63,6 +63,13 @@ public class Section(
     schemaIndex = 4,
   )
   public val stack_direction: StackDirection = StackDirection.STACK_DIRECTION_UNSPECIFIED,
+  @field:WireField(
+    tag = 6,
+    adapter = "com.squareup.wire.ProtoAdapter#STRING",
+    jsonName = "debugName",
+    schemaIndex = 5,
+  )
+  public val debug_name: String? = null,
   widgets: List<Widget> = emptyList(),
   unknownFields: ByteString = ByteString.EMPTY,
 ) : Message<Section, Nothing>(ADAPTER, unknownFields) {
@@ -83,10 +90,10 @@ public class Section(
   public val actions: List<Action> = immutableCopyOf("actions", actions)
 
   @field:WireField(
-    tag = 6,
+    tag = 7,
     adapter = "protobuf.source.widget.Widget#ADAPTER",
     label = WireField.Label.REPEATED,
-    schemaIndex = 5,
+    schemaIndex = 6,
   )
   public val widgets: List<Widget> = immutableCopyOf("widgets", widgets)
 
@@ -105,6 +112,7 @@ public class Section(
     if (actions != other.actions) return false
     if (type != other.type) return false
     if (stack_direction != other.stack_direction) return false
+    if (debug_name != other.debug_name) return false
     if (widgets != other.widgets) return false
     return true
   }
@@ -118,6 +126,7 @@ public class Section(
       result = result * 37 + actions.hashCode()
       result = result * 37 + type.hashCode()
       result = result * 37 + stack_direction.hashCode()
+      result = result * 37 + (debug_name?.hashCode() ?: 0)
       result = result * 37 + widgets.hashCode()
       super.hashCode = result
     }
@@ -131,6 +140,7 @@ public class Section(
     if (actions.isNotEmpty()) result += """actions=$actions"""
     result += """type=$type"""
     result += """stack_direction=$stack_direction"""
+    if (debug_name != null) result += """debug_name=${sanitize(debug_name)}"""
     if (widgets.isNotEmpty()) result += """widgets=$widgets"""
     return result.joinToString(prefix = "Section{", separator = ", ", postfix = "}")
   }
@@ -141,9 +151,10 @@ public class Section(
     actions: List<Action> = this.actions,
     type: Type = this.type,
     stack_direction: StackDirection = this.stack_direction,
+    debug_name: String? = this.debug_name,
     widgets: List<Widget> = this.widgets,
     unknownFields: ByteString = this.unknownFields,
-  ): Section = Section(id, attributes, actions, type, stack_direction, widgets, unknownFields)
+  ): Section = Section(id, attributes, actions, type, stack_direction, debug_name, widgets, unknownFields)
 
   public companion object {
     @JvmField
@@ -168,7 +179,8 @@ public class Section(
         if (value.stack_direction != protobuf.source.section.Section.StackDirection.STACK_DIRECTION_UNSPECIFIED) {
           size += StackDirection.ADAPTER.encodedSizeWithTag(5, value.stack_direction)
         }
-        size += Widget.ADAPTER.asRepeated().encodedSizeWithTag(6, value.widgets)
+        size += ProtoAdapter.STRING.encodedSizeWithTag(6, value.debug_name)
+        size += Widget.ADAPTER.asRepeated().encodedSizeWithTag(7, value.widgets)
         return size
       }
 
@@ -184,13 +196,15 @@ public class Section(
         if (value.stack_direction != protobuf.source.section.Section.StackDirection.STACK_DIRECTION_UNSPECIFIED) {
           StackDirection.ADAPTER.encodeWithTag(writer, 5, value.stack_direction)
         }
-        Widget.ADAPTER.asRepeated().encodeWithTag(writer, 6, value.widgets)
+        ProtoAdapter.STRING.encodeWithTag(writer, 6, value.debug_name)
+        Widget.ADAPTER.asRepeated().encodeWithTag(writer, 7, value.widgets)
         writer.writeBytes(value.unknownFields)
       }
 
       override fun encode(writer: ReverseProtoWriter, `value`: Section) {
         writer.writeBytes(value.unknownFields)
-        Widget.ADAPTER.asRepeated().encodeWithTag(writer, 6, value.widgets)
+        Widget.ADAPTER.asRepeated().encodeWithTag(writer, 7, value.widgets)
+        ProtoAdapter.STRING.encodeWithTag(writer, 6, value.debug_name)
         if (value.stack_direction != protobuf.source.section.Section.StackDirection.STACK_DIRECTION_UNSPECIFIED) {
           StackDirection.ADAPTER.encodeWithTag(writer, 5, value.stack_direction)
         }
@@ -210,6 +224,7 @@ public class Section(
         val actions = mutableListOf<Action>()
         var type: Type = Type.TYPE_UNSPECIFIED
         var stack_direction: StackDirection = StackDirection.STACK_DIRECTION_UNSPECIFIED
+        var debug_name: String? = null
         val widgets = mutableListOf<Widget>()
         val unknownFields = reader.forEachTag { tag ->
           when (tag) {
@@ -226,7 +241,8 @@ public class Section(
             } catch (e: ProtoAdapter.EnumConstantNotFoundException) {
               reader.addUnknownField(tag, FieldEncoding.VARINT, e.value.toLong())
             }
-            6 -> widgets.add(Widget.ADAPTER.decode(reader))
+            6 -> debug_name = ProtoAdapter.STRING.decode(reader)
+            7 -> widgets.add(Widget.ADAPTER.decode(reader))
             else -> reader.readUnknownField(tag)
           }
         }
@@ -236,6 +252,7 @@ public class Section(
           actions = actions,
           type = type,
           stack_direction = stack_direction,
+          debug_name = debug_name,
           widgets = widgets,
           unknownFields = unknownFields
         )

@@ -3,6 +3,7 @@ package bffui.composeruntime.poc
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.withRunningRecomposer
+import bff.ui.ProtobufApplier
 import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin

@@ -5,6 +5,7 @@ package protobuf.source.widget;
 import "action/action.proto";
 import "attributes/attributes.proto";
 import "component/cell_text_component.proto";
+import "component/cell_divider_component.proto";
 
 message SearchHospitalAWidgetContent {
   message EventChildWidget {
@@ -18,5 +19,6 @@ message SearchHospitalAWidgetContent {
 
   optional component.CellTextComponent hospital_name = 1;
   optional component.CellTextComponent info_text = 2;
-  repeated EventChildWidget event_items = 3;
+  component.CellDividerComponent divider = 3;
+  repeated EventChildWidget event_items = 4;
 }
