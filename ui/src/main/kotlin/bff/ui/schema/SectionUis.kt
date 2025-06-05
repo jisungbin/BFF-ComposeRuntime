@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentCompositeKeyHash
 import bff.ui.ProtobufApplier
+import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScopeMarker
-import bff.ui.`internal`.RegularFieldTag
 import bff.ui.action.Actions
 import bff.ui.attribute.Attributes
 import kotlin.String
@@ -73,8 +73,8 @@ internal data object SectionScopeProvider : SectionScope {
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(5)] = stackDirection
-          if (debugName != null) data[RegularFieldTag(6)] = debugName
+          data[ProtobufFieldTag(5)] = stackDirection
+          if (debugName != null) data[ProtobufFieldTag(6)] = debugName
         }
       },
     ) {
@@ -109,8 +109,8 @@ internal data object SectionScopeProvider : SectionScope {
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(5)] = stackDirection
-          if (debugName != null) data[RegularFieldTag(6)] = debugName
+          data[ProtobufFieldTag(5)] = stackDirection
+          if (debugName != null) data[ProtobufFieldTag(6)] = debugName
         }
       },
     ) {
@@ -145,8 +145,8 @@ internal data object SectionScopeProvider : SectionScope {
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(5)] = stackDirection
-          if (debugName != null) data[RegularFieldTag(6)] = debugName
+          data[ProtobufFieldTag(5)] = stackDirection
+          if (debugName != null) data[ProtobufFieldTag(6)] = debugName
         }
       },
     ) {

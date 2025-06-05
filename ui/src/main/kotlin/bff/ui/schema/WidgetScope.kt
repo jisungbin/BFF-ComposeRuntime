@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentCompositeKeyHash
 import bff.ui.ProtobufApplier
+import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScope.Widget
 import bff.ui.UiScopeMarker
-import bff.ui.`internal`.RegularFieldTag
 import bff.ui.action.Actions
 import bff.ui.attribute.Attributes
 import kotlin.String
@@ -96,8 +96,8 @@ internal data object WidgetScopeProvider : WidgetScope {
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = color
-          if (debugName != null) data[RegularFieldTag(3)] = debugName
+          data[ProtobufFieldTag(2)] = color
+          if (debugName != null) data[ProtobufFieldTag(3)] = debugName
         }
       },
     ) {

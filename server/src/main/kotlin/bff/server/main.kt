@@ -1,11 +1,10 @@
-package bffui.composeruntime.poc
+package bff.server
 
 import bff.ui.action.Actions
 import bff.ui.attribute.Attributes
 import bff.ui.protobufUi
 import bff.ui.schema.padding
 import bff.ui.schema.size
-import java.awt.SystemColor.text
 import kotlinx.coroutines.runBlocking
 import protobuf.source.action.Action.TriggerCondition
 import protobuf.source.action.Action.Type

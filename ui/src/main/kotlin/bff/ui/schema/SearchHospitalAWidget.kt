@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentCompositeKeyHash
 import bff.ui.ProtobufApplier
+import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScope.ChildWidgetOrComponent
 import bff.ui.UiScopeMarker
-import bff.ui.`internal`.RegularFieldTag
 import bff.ui.action.Actions
 import bff.ui.attribute.Attributes
 import kotlin.String
@@ -250,9 +250,9 @@ internal data object SearchHospitalAHospitalNameScopeProvider : SearchHospitalAH
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -294,9 +294,9 @@ internal data object SearchHospitalAInfoTextScopeProvider : SearchHospitalAInfoT
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -331,7 +331,7 @@ internal data object SearchHospitalADividerScopeProvider : SearchHospitalADivide
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
+          data[ProtobufFieldTag(2)] = style
         }
       },
     ) {
@@ -374,9 +374,9 @@ internal data object SearchHospitalAAEventItemsTitleScopeProvider : SearchHospit
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -418,9 +418,9 @@ internal data object SearchHospitalAAEventItemsCostScopeProvider : SearchHospita
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -455,7 +455,7 @@ internal data object SearchHospitalAAEventItemsDividerScopeProvider : SearchHosp
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
+          data[ProtobufFieldTag(2)] = style
         }
       },
     ) {
@@ -528,9 +528,9 @@ internal data object SearchHospitalADividerTextScopeProvider : SearchHospitalADi
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -572,9 +572,9 @@ internal data object SearchHospitalAAEventItemsDividerTextScopeProvider : Search
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -616,9 +616,9 @@ internal data object SearchHospitalAAEventItemsBEventItemsTitleScopeProvider : S
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -660,9 +660,9 @@ internal data object SearchHospitalAAEventItemsBEventItemsCostScopeProvider : Se
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {
@@ -697,7 +697,7 @@ internal data object SearchHospitalAAEventItemsBEventItemsDividerScopeProvider :
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
+          data[ProtobufFieldTag(2)] = style
         }
       },
     ) {
@@ -740,9 +740,9 @@ internal data object SearchHospitalAAEventItemsBEventItemsDividerTextScopeProvid
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {

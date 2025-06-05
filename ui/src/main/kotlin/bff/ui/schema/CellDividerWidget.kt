@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentCompositeKeyHash
 import bff.ui.ProtobufApplier
+import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScope.ChildWidgetOrComponent
 import bff.ui.UiScopeMarker
-import bff.ui.`internal`.RegularFieldTag
 import bff.ui.action.Actions
 import bff.ui.attribute.Attributes
 import kotlin.String
@@ -68,7 +68,7 @@ internal data object CellDividerDividerScopeProvider : CellDividerDividerScope {
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
+          data[ProtobufFieldTag(2)] = style
         }
       },
     ) {
@@ -111,9 +111,9 @@ internal data object CellDividerDividerTextScopeProvider : CellDividerDividerTex
           currentCompositeKeyHash,
         )
         init {
-          data[RegularFieldTag(2)] = style
-          data[RegularFieldTag(3)] = color
-          data[RegularFieldTag(4)] = text
+          data[ProtobufFieldTag(2)] = style
+          data[ProtobufFieldTag(3)] = color
+          data[ProtobufFieldTag(4)] = text
         }
       },
     ) {

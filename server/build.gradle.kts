@@ -7,7 +7,7 @@ plugins {
 }
 
 application {
-  mainClass = "bffui.composeruntime.poc.MainKt"
+  mainClass = "bff.server.MainKt"
 }
 
 dependencies {

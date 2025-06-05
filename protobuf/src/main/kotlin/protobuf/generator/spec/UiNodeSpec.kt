@@ -96,13 +96,13 @@ private data class NodeParameters(
 )
 
 internal object UiNodeSpec {
+  private val ActionsCn = ClassName("bff.ui.action", "Actions")
   private val UiScopeCn = ClassName("bff.ui", "UiScope")
   private val UiScopeMarkerCn = ClassName("bff.ui", "UiScopeMarker")
-  private val RegularFieldTagCn = ClassName("bff.ui.internal", "RegularFieldTag")
 
-  private val ActionsCn = ClassName("bff.ui.action", "Actions")
   private val ProtobufNodeCn = ClassName("bff.ui", "ProtobufNode")
   private val ProtobufApplierCn = ClassName("bff.ui", "ProtobufApplier")
+  private val ProtobufFieldTagCn = ClassName("bff.ui", "ProtobufFieldTag")
 
   private val wellKnownFieldNames =
     listOf(
@@ -349,10 +349,6 @@ internal object UiNodeSpec {
       )
     val composeNodeMn = MemberName("androidx.compose.runtime", "ComposeNode")
 
-    val uiParametersWithScopeProvider = uiParameters.map { parameter ->
-      parameter to parameter.uiScopeCn().provider()
-    }
-
     return buildCodeBlock {
       add("%M<%T, %T>(\n", composeNodeMn, ProtobufNodeCn, ProtobufApplierCn)
       indent()
@@ -368,7 +364,7 @@ internal object UiNodeSpec {
           beginControlFlow("init")
           regularParameters.forEach { parameter ->
             addNullSafeStatement(parameter.name, parameter.type.isNullable) {
-              CodeBlock.of("data[%T(%L)] = %N", RegularFieldTagCn, parameter.protoTag(), parameter)
+              CodeBlock.of("data[%T(%L)] = %N", ProtobufFieldTagCn, parameter.protoTag(), parameter)
             }
           }
           endControlFlow()
@@ -381,8 +377,8 @@ internal object UiNodeSpec {
       if (uiNode.contentParamName != null && uiNode.contentUiScopeName != null) {
         addStatement("%LProvider.%L()", uiNode.contentUiScopeName, uiNode.contentParamName)
       }
-      uiParametersWithScopeProvider.forEach { (parameter, scopeProvider) ->
-        addStatement("%T.%N()", scopeProvider, parameter)
+      uiParameters.forEach { parameter ->
+        addStatement("%T.%N()", parameter.uiScopeCn().provider(), parameter)
       }
       unindent()
       add("}")
