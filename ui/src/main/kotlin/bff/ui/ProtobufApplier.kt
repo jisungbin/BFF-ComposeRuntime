@@ -2,7 +2,7 @@ package bff.ui
 
 import androidx.compose.runtime.AbstractApplier
 
-public class ProtobufApplier(root: ProtobufNode) : AbstractApplier<ProtobufNode>(root) {
+internal class ProtobufApplier(root: ProtobufNode) : AbstractApplier<ProtobufNode>(root) {
   override fun insertTopDown(index: Int, instance: ProtobufNode) {
     current.insertAt(index, instance)
   }

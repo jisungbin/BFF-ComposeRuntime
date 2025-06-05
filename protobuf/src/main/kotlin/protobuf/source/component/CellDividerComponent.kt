@@ -46,6 +46,13 @@ public class CellDividerComponent(
     schemaIndex = 1,
   )
   public val style: Style = Style.STYLE_UNSPECIFIED,
+  @field:WireField(
+    tag = 3,
+    adapter = "protobuf.source.component.CellTextComponent#ADAPTER",
+    label = WireField.Label.OMIT_IDENTITY,
+    schemaIndex = 2,
+  )
+  public val text: CellTextComponent? = null,
   unknownFields: ByteString = ByteString.EMPTY,
 ) : Message<CellDividerComponent, Nothing>(ADAPTER, unknownFields) {
   @Deprecated(
@@ -60,6 +67,7 @@ public class CellDividerComponent(
     if (unknownFields != other.unknownFields) return false
     if (base != other.base) return false
     if (style != other.style) return false
+    if (text != other.text) return false
     return true
   }
 
@@ -69,6 +77,7 @@ public class CellDividerComponent(
       result = unknownFields.hashCode()
       result = result * 37 + (base?.hashCode() ?: 0)
       result = result * 37 + style.hashCode()
+      result = result * 37 + (text?.hashCode() ?: 0)
       super.hashCode = result
     }
     return result
@@ -78,14 +87,16 @@ public class CellDividerComponent(
     val result = mutableListOf<String>()
     if (base != null) result += """base=$base"""
     result += """style=$style"""
+    if (text != null) result += """text=$text"""
     return result.joinToString(prefix = "CellDividerComponent{", separator = ", ", postfix = "}")
   }
 
   public fun copy(
     base: ComponentBase? = this.base,
     style: Style = this.style,
+    text: CellTextComponent? = this.text,
     unknownFields: ByteString = this.unknownFields,
-  ): CellDividerComponent = CellDividerComponent(base, style, unknownFields)
+  ): CellDividerComponent = CellDividerComponent(base, style, text, unknownFields)
 
   public companion object {
     @JvmField
@@ -106,6 +117,9 @@ public class CellDividerComponent(
         if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
           size += Style.ADAPTER.encodedSizeWithTag(2, value.style)
         }
+        if (value.text != null) {
+          size += CellTextComponent.ADAPTER.encodedSizeWithTag(3, value.text)
+        }
         return size
       }
 
@@ -116,11 +130,17 @@ public class CellDividerComponent(
         if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
           Style.ADAPTER.encodeWithTag(writer, 2, value.style)
         }
+        if (value.text != null) {
+          CellTextComponent.ADAPTER.encodeWithTag(writer, 3, value.text)
+        }
         writer.writeBytes(value.unknownFields)
       }
 
       override fun encode(writer: ReverseProtoWriter, `value`: CellDividerComponent) {
         writer.writeBytes(value.unknownFields)
+        if (value.text != null) {
+          CellTextComponent.ADAPTER.encodeWithTag(writer, 3, value.text)
+        }
         if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
           Style.ADAPTER.encodeWithTag(writer, 2, value.style)
         }
@@ -132,6 +152,7 @@ public class CellDividerComponent(
       override fun decode(reader: ProtoReader): CellDividerComponent {
         var base: ComponentBase? = null
         var style: Style = Style.STYLE_UNSPECIFIED
+        var text: CellTextComponent? = null
         val unknownFields = reader.forEachTag { tag ->
           when (tag) {
             1 -> base = ComponentBase.ADAPTER.decode(reader)
@@ -140,18 +161,21 @@ public class CellDividerComponent(
             } catch (e: ProtoAdapter.EnumConstantNotFoundException) {
               reader.addUnknownField(tag, FieldEncoding.VARINT, e.value.toLong())
             }
+            3 -> text = CellTextComponent.ADAPTER.decode(reader)
             else -> reader.readUnknownField(tag)
           }
         }
         return CellDividerComponent(
           base = base,
           style = style,
+          text = text,
           unknownFields = unknownFields
         )
       }
 
       override fun redact(`value`: CellDividerComponent): CellDividerComponent = value.copy(
         base = value.base?.let(ComponentBase.ADAPTER::redact),
+        text = value.text?.let(CellTextComponent.ADAPTER::redact),
         unknownFields = ByteString.EMPTY
       )
     }

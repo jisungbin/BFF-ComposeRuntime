@@ -22,7 +22,6 @@ private class MutableAttributes : Attributes {
 @Poko public class Attribute internal constructor(
   public val index: Int,
   public val arguments: IntObjectMap<Any>,
-  internal var id: Int? = null,
 )
 
 public infix fun Attributes.then(other: Attribute): Attributes {

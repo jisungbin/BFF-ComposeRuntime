@@ -8,17 +8,29 @@ import "component/cell_text_component.proto";
 import "component/cell_divider_component.proto";
 
 message SearchHospitalAWidgetContent {
-  message EventChildWidget {
+  message AEventChildWidget {
     string id = 1;
     repeated attributes.Attributes attributes = 2;
     repeated action.Action actions = 3;
 
     optional component.CellTextComponent title = 4;
     optional component.CellTextComponent cost = 5;
+    component.CellDividerComponent divider = 6;
+    BEventChildWidget b_event_items = 7;
   }
 
-  optional component.CellTextComponent hospital_name = 1;
-  optional component.CellTextComponent info_text = 2;
+  message BEventChildWidget {
+    string id = 1;
+    repeated attributes.Attributes attributes = 2;
+    repeated action.Action actions = 3;
+
+    optional component.CellTextComponent title = 4;
+    optional component.CellTextComponent cost = 5;
+    component.CellDividerComponent divider = 6;
+  }
+
+  repeated component.CellTextComponent hospital_name = 1;
+  repeated component.CellTextComponent info_text = 2;
   component.CellDividerComponent divider = 3;
-  repeated EventChildWidget event_items = 4;
+  optional AEventChildWidget a_event_items = 4;
 }

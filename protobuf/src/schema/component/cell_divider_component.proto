@@ -3,6 +3,7 @@ syntax = "proto3";
 package protobuf.source.component;
 
 import "component/component_base.proto";
+import "component/cell_text_component.proto";
 
 message CellDividerComponent {
   enum Style {
@@ -13,4 +14,5 @@ message CellDividerComponent {
 
   ComponentBase base = 1;
   Style style = 2;
+  CellTextComponent text = 3;
 }

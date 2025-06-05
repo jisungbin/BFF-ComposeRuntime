@@ -1,34 +1,35 @@
 package bff.ui
 
+import androidx.collection.ObjectList
+import androidx.collection.mutableObjectListOf
 import androidx.compose.runtime.Updater
-import androidx.compose.runtime.collection.mutableVectorOf
 import bff.ui.action.Actions
 import bff.ui.attribute.Attributes
 import kotlin.properties.Delegates
 
-public class ProtobufNode {
-  public lateinit var id: String internal set
-  public lateinit var attributes: Attributes internal set
-  public lateinit var actions: Actions internal set
-  public lateinit var scope: UiScope internal set
+internal class ProtobufNode {
+  internal lateinit var id: String
+  internal lateinit var attributes: Attributes
+  internal lateinit var actions: Actions
+  internal lateinit var scope: UiScope
 
-  public val data: ProtobufData = ProtobufData()
+  internal val data: ProtobufData = ProtobufData()
   internal var compositeKeyHash by Delegates.notNull<Int>()
 
-  private val _children = mutableVectorOf<ProtobufNode>()
-  public val children: List<ProtobufNode> get() = _children.asMutableList()
+  private val _children = mutableObjectListOf<ProtobufNode>()
+  internal val children: ObjectList<ProtobufNode> get() = _children
 
-  public fun insertAt(index: Int, node: ProtobufNode) {
+  internal fun insertAt(index: Int, node: ProtobufNode) {
     _children.add(index, node)
   }
 
-  public fun clear() {
+  internal fun clear() {
     _children.clear()
   }
 
-  public fun buildJson(): String = TODO()
+  internal fun buildModel(): Any = TODO()
 
-  public companion object {
+  internal companion object {
     internal val CONSTRUCTOR = ::ProtobufNode
     internal val INIT: Updater<ProtobufNode>.(Attributes, Actions, UiScope, Int) -> Unit =
       { attributes, actions, scope, compositeKeyHash ->

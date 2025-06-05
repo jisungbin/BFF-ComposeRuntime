@@ -1,6 +1,6 @@
 package bff.ui
 
-public class ProtobufData(
+internal class ProtobufData(
   private val backing: MutableMap<Any, Any> = mutableMapOf(),
 ) : MutableMap<Any, Any> by backing {
   private var locked = false
@@ -10,7 +10,7 @@ public class ProtobufData(
     return backing.put(key, value)
   }
 
-  public fun lock() {
+  internal fun lock() {
     check(!locked) { "ProtobufData is already locked" }
     locked = true
   }

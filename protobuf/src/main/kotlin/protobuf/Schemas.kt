@@ -1,6 +1,5 @@
 package protobuf
 
-import com.squareup.wire.schema.EnumType
 import com.squareup.wire.schema.MessageType
 import com.squareup.wire.schema.ProtoType
 import com.squareup.wire.schema.SchemaLoader
@@ -8,7 +7,7 @@ import com.squareup.wire.schema.Type
 import okio.FileSystem
 import protobuf.generator.PROTO_SOURCE_PATH
 
-internal object Schema {
+internal object Schemas {
   private val schema =
     SchemaLoader(FileSystem.SYSTEM)
       .apply { initRoots(listOf(PROTO_SOURCE_PATH)) }

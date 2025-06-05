@@ -1,38 +1,60 @@
 package bffui.composeruntime.poc
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Composition
-import androidx.compose.runtime.withRunningRecomposer
-import bff.ui.ProtobufApplier
-import kotlin.coroutines.coroutineContext
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
+import bff.ui.action.Actions
+import bff.ui.attribute.Attributes
+import bff.ui.protobufUi
+import bff.ui.schema.padding
+import bff.ui.schema.size
+import java.awt.SystemColor.text
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import protobuf.source.action.Action.TriggerCondition
+import protobuf.source.action.Action.Type
+import protobuf.source.attributes.Attributes.SizeArea
+import protobuf.source.component.CellColor
+import protobuf.source.component.CellDividerComponent
+import protobuf.source.component.CellTextStyle
+import protobuf.source.section.Section
 
 fun main() {
   val bffUiJson = runBlocking {
-    protobuf {
-
+    protobufUi {
+      RootScreen {
+        BodySection(
+          Attributes
+            .size(SizeArea.SIZE_AREA_WIDTH, 10f)
+            .size(SizeArea.SIZE_AREA_HEIGHT, 10f),
+          Actions
+            .action(Type.TYPE_URI_SCHEME, TriggerCondition.TRIGGER_CONDITION_IMMEDIATE, "https://example.com")
+            .action(Type.TYPE_LOGGING, TriggerCondition.TRIGGER_CONDITION_TAP),
+          stackDirection = Section.StackDirection.STACK_DIRECTION_VERTICAL,
+        ) {
+          SearchHospitalAWidget(
+            aEventItems = {
+              AEventChildWidget(
+                attributes = Attributes.padding(top = 10f, leading = 31f),
+                actions = Actions.action(Type.TYPE_LOGGING, TriggerCondition.TRIGGER_CONDITION_TAP),
+                divider = {
+                  CellDividerComponent(style = CellDividerComponent.Style.STYLE_SECTION) {
+                    CellTextComponent(
+                      attributes = Attributes.padding(trailing = 1235f),
+                      actions = Actions.action(Type.TYPE_LOGGING, TriggerCondition.TRIGGER_CONDITION_TAP),
+                      style = CellTextStyle.CELL_TEXT_STYLE_BOLD,
+                      color = CellColor.CELL_COLOR_BLACK,
+                      text = "",
+                    )
+                  }
+                },
+                bEventItems = {},
+              )
+            },
+            hospitalName = {},
+            infoText = {},
+            divider = {},
+          )
+        }
+      }
     }
   }
   println(bffUiJson)
 }
 
-private suspend fun protobuf(content: @Composable () -> Unit): String {
-  val runningJob = Job(parent = coroutineContext[Job])
-
-  val protobuf = ProtobufNode()
-  var composition: Composition? = null
-
-  withContext(coroutineContext + runningJob + ImmediateMonotonicFrameClock) {
-    withRunningRecomposer { recomposer ->
-      composition = Composition(ProtobufApplier(protobuf), recomposer).apply {
-        setContent(content)
-      }
-    }
-  }
-
-  runningJob.cancelAndJoin()
-  return protobuf.buildJson().also { composition?.dispose() }
-}
