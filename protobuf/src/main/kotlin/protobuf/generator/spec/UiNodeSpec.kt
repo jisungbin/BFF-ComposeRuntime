@@ -116,6 +116,7 @@ internal object UiNodeSpec {
       "content",
     )
 
+  // TODO(dx) widgets, components 코드젠 패키지 분리 (하위 패키지로 나누기)
   internal fun uiNodeFiles(): List<FileSpec> {
     fun MessageType.enumUiTypes(): List<UiType> =
       (nestedTypes.first { it is EnumType && it.name == "Type" } as EnumType)
