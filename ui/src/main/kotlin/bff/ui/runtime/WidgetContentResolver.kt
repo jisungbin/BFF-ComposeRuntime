@@ -10,7 +10,6 @@ import bff.ui.helper.childOfScope
 import bff.ui.helper.childOfScopeOrNull
 import bff.ui.helper.childrenOfScope
 import bff.ui.protoField
-import kotlin.String
 import protobuf.source.component.CellColor
 import protobuf.source.widget.CellDividerWidgetContent
 import protobuf.source.widget.SearchHospitalAWidgetContent

@@ -15,18 +15,8 @@ import com.squareup.wire.ProtoWriter
 import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.sanitize
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.sanitize
 import okio.ByteString
 import protobuf.source.component.CellColor
 import protobuf.source.component.CellDividerComponent
@@ -101,77 +91,77 @@ public class CellDividerWidgetContent(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<CellDividerWidgetContent> =
-        object : ProtoAdapter<CellDividerWidgetContent>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      CellDividerWidgetContent::class, 
-      "type.googleapis.com/protobuf.source.widget.CellDividerWidgetContent", 
-      PROTO_3, 
-      null, 
-      "widget/cell_divider_widget_content.proto"
-    ) {
-      override fun encodedSize(`value`: CellDividerWidgetContent): Int {
-        var size = value.unknownFields.size
-        if (value.divider != null) {
-          size += CellDividerComponent.ADAPTER.encodedSizeWithTag(1, value.divider)
+      object : ProtoAdapter<CellDividerWidgetContent>(
+        FieldEncoding.LENGTH_DELIMITED,
+        CellDividerWidgetContent::class,
+        "type.googleapis.com/protobuf.source.widget.CellDividerWidgetContent",
+        PROTO_3,
+        null,
+        "widget/cell_divider_widget_content.proto"
+      ) {
+        override fun encodedSize(`value`: CellDividerWidgetContent): Int {
+          var size = value.unknownFields.size
+          if (value.divider != null) {
+            size += CellDividerComponent.ADAPTER.encodedSizeWithTag(1, value.divider)
+          }
+          if (value.color != protobuf.source.component.CellColor.CELL_COLOR_UNSPECIFIED) {
+            size += CellColor.ADAPTER.encodedSizeWithTag(2, value.color)
+          }
+          size += ProtoAdapter.STRING.encodedSizeWithTag(3, value.debug_name)
+          return size
         }
-        if (value.color != protobuf.source.component.CellColor.CELL_COLOR_UNSPECIFIED) {
-          size += CellColor.ADAPTER.encodedSizeWithTag(2, value.color)
-        }
-        size += ProtoAdapter.STRING.encodedSizeWithTag(3, value.debug_name)
-        return size
-      }
 
-      override fun encode(writer: ProtoWriter, `value`: CellDividerWidgetContent) {
-        if (value.divider != null) {
-          CellDividerComponent.ADAPTER.encodeWithTag(writer, 1, value.divider)
+        override fun encode(writer: ProtoWriter, `value`: CellDividerWidgetContent) {
+          if (value.divider != null) {
+            CellDividerComponent.ADAPTER.encodeWithTag(writer, 1, value.divider)
+          }
+          if (value.color != protobuf.source.component.CellColor.CELL_COLOR_UNSPECIFIED) {
+            CellColor.ADAPTER.encodeWithTag(writer, 2, value.color)
+          }
+          ProtoAdapter.STRING.encodeWithTag(writer, 3, value.debug_name)
+          writer.writeBytes(value.unknownFields)
         }
-        if (value.color != protobuf.source.component.CellColor.CELL_COLOR_UNSPECIFIED) {
-          CellColor.ADAPTER.encodeWithTag(writer, 2, value.color)
-        }
-        ProtoAdapter.STRING.encodeWithTag(writer, 3, value.debug_name)
-        writer.writeBytes(value.unknownFields)
-      }
 
-      override fun encode(writer: ReverseProtoWriter, `value`: CellDividerWidgetContent) {
-        writer.writeBytes(value.unknownFields)
-        ProtoAdapter.STRING.encodeWithTag(writer, 3, value.debug_name)
-        if (value.color != protobuf.source.component.CellColor.CELL_COLOR_UNSPECIFIED) {
-          CellColor.ADAPTER.encodeWithTag(writer, 2, value.color)
-        }
-        if (value.divider != null) {
-          CellDividerComponent.ADAPTER.encodeWithTag(writer, 1, value.divider)
-        }
-      }
-
-      override fun decode(reader: ProtoReader): CellDividerWidgetContent {
-        var divider: CellDividerComponent? = null
-        var color: CellColor = CellColor.CELL_COLOR_UNSPECIFIED
-        var debug_name: String? = null
-        val unknownFields = reader.forEachTag { tag ->
-          when (tag) {
-            1 -> divider = CellDividerComponent.ADAPTER.decode(reader)
-            2 -> try {
-              color = CellColor.ADAPTER.decode(reader)
-            } catch (e: ProtoAdapter.EnumConstantNotFoundException) {
-              reader.addUnknownField(tag, FieldEncoding.VARINT, e.value.toLong())
-            }
-            3 -> debug_name = ProtoAdapter.STRING.decode(reader)
-            else -> reader.readUnknownField(tag)
+        override fun encode(writer: ReverseProtoWriter, `value`: CellDividerWidgetContent) {
+          writer.writeBytes(value.unknownFields)
+          ProtoAdapter.STRING.encodeWithTag(writer, 3, value.debug_name)
+          if (value.color != protobuf.source.component.CellColor.CELL_COLOR_UNSPECIFIED) {
+            CellColor.ADAPTER.encodeWithTag(writer, 2, value.color)
+          }
+          if (value.divider != null) {
+            CellDividerComponent.ADAPTER.encodeWithTag(writer, 1, value.divider)
           }
         }
-        return CellDividerWidgetContent(
-          divider = divider,
-          color = color,
-          debug_name = debug_name,
-          unknownFields = unknownFields
+
+        override fun decode(reader: ProtoReader): CellDividerWidgetContent {
+          var divider: CellDividerComponent? = null
+          var color: CellColor = CellColor.CELL_COLOR_UNSPECIFIED
+          var debug_name: String? = null
+          val unknownFields = reader.forEachTag { tag ->
+            when (tag) {
+              1 -> divider = CellDividerComponent.ADAPTER.decode(reader)
+              2 -> try {
+                color = CellColor.ADAPTER.decode(reader)
+              } catch (e: ProtoAdapter.EnumConstantNotFoundException) {
+                reader.addUnknownField(tag, FieldEncoding.VARINT, e.value.toLong())
+              }
+              3 -> debug_name = ProtoAdapter.STRING.decode(reader)
+              else -> reader.readUnknownField(tag)
+            }
+          }
+          return CellDividerWidgetContent(
+            divider = divider,
+            color = color,
+            debug_name = debug_name,
+            unknownFields = unknownFields
+          )
+        }
+
+        override fun redact(`value`: CellDividerWidgetContent): CellDividerWidgetContent = value.copy(
+          divider = value.divider?.let(CellDividerComponent.ADAPTER::redact),
+          unknownFields = ByteString.EMPTY
         )
       }
-
-      override fun redact(`value`: CellDividerWidgetContent): CellDividerWidgetContent = value.copy(
-        divider = value.divider?.let(CellDividerComponent.ADAPTER::redact),
-        unknownFields = ByteString.EMPTY
-      )
-    }
 
     private const val serialVersionUID: Long = 0L
   }

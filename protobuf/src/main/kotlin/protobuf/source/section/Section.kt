@@ -17,22 +17,11 @@ import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireEnum
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.JvmStatic
-import com.squareup.wire.`internal`.immutableCopyOf
-import com.squareup.wire.`internal`.redactElements
-import com.squareup.wire.`internal`.sanitize
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
-import kotlin.collections.List
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.JvmStatic
+import com.squareup.wire.internal.immutableCopyOf
+import com.squareup.wire.internal.redactElements
+import com.squareup.wire.internal.sanitize
 import okio.ByteString
 import protobuf.source.action.Action
 import protobuf.source.attributes.Attributes
@@ -159,11 +148,11 @@ public class Section(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<Section> = object : ProtoAdapter<Section>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      Section::class, 
-      "type.googleapis.com/protobuf.source.section.Section", 
-      PROTO_3, 
-      null, 
+      FieldEncoding.LENGTH_DELIMITED,
+      Section::class,
+      "type.googleapis.com/protobuf.source.section.Section",
+      PROTO_3,
+      null,
       "section/section.proto"
     ) {
       override fun encodedSize(`value`: Section): Int {
@@ -281,8 +270,8 @@ public class Section(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<Type> = object : EnumAdapter<Type>(
-        Type::class, 
-        PROTO_3, 
+        Type::class,
+        PROTO_3,
         Type.TYPE_UNSPECIFIED
       ) {
         override fun fromValue(`value`: Int): Type? = Type.fromValue(`value`)
@@ -310,8 +299,8 @@ public class Section(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<StackDirection> = object : EnumAdapter<StackDirection>(
-        StackDirection::class, 
-        PROTO_3, 
+        StackDirection::class,
+        PROTO_3,
         StackDirection.STACK_DIRECTION_UNSPECIFIED
       ) {
         override fun fromValue(`value`: Int): StackDirection? = StackDirection.fromValue(`value`)

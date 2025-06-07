@@ -11,10 +11,8 @@ import com.squareup.wire.EnumAdapter
 import com.squareup.wire.ProtoAdapter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireEnum
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.JvmStatic
-import kotlin.Int
-import kotlin.Suppress
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.JvmStatic
 
 public enum class CellTextStyle(
   override val `value`: Int,
@@ -28,8 +26,8 @@ public enum class CellTextStyle(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<CellTextStyle> = object : EnumAdapter<CellTextStyle>(
-      CellTextStyle::class, 
-      PROTO_3, 
+      CellTextStyle::class,
+      PROTO_3,
       CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED
     ) {
       override fun fromValue(`value`: Int): CellTextStyle? = CellTextStyle.fromValue(`value`)

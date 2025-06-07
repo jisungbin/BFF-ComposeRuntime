@@ -15,18 +15,8 @@ import com.squareup.wire.ProtoWriter
 import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.sanitize
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.sanitize
 import okio.ByteString
 
 public class CellTextComponent(
@@ -110,11 +100,11 @@ public class CellTextComponent(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<CellTextComponent> = object : ProtoAdapter<CellTextComponent>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      CellTextComponent::class, 
-      "type.googleapis.com/protobuf.source.component.CellTextComponent", 
-      PROTO_3, 
-      null, 
+      FieldEncoding.LENGTH_DELIMITED,
+      CellTextComponent::class,
+      "type.googleapis.com/protobuf.source.component.CellTextComponent",
+      PROTO_3,
+      null,
       "component/cell_text_component.proto"
     ) {
       override fun encodedSize(`value`: CellTextComponent): Int {

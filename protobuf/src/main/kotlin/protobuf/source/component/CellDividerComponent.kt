@@ -17,18 +17,8 @@ import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireEnum
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.JvmStatic
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.JvmStatic
 import okio.ByteString
 
 public class CellDividerComponent(
@@ -101,84 +91,84 @@ public class CellDividerComponent(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<CellDividerComponent> =
-        object : ProtoAdapter<CellDividerComponent>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      CellDividerComponent::class, 
-      "type.googleapis.com/protobuf.source.component.CellDividerComponent", 
-      PROTO_3, 
-      null, 
-      "component/cell_divider_component.proto"
-    ) {
-      override fun encodedSize(`value`: CellDividerComponent): Int {
-        var size = value.unknownFields.size
-        if (value.base != null) {
-          size += ComponentBase.ADAPTER.encodedSizeWithTag(1, value.base)
+      object : ProtoAdapter<CellDividerComponent>(
+        FieldEncoding.LENGTH_DELIMITED,
+        CellDividerComponent::class,
+        "type.googleapis.com/protobuf.source.component.CellDividerComponent",
+        PROTO_3,
+        null,
+        "component/cell_divider_component.proto"
+      ) {
+        override fun encodedSize(`value`: CellDividerComponent): Int {
+          var size = value.unknownFields.size
+          if (value.base != null) {
+            size += ComponentBase.ADAPTER.encodedSizeWithTag(1, value.base)
+          }
+          if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
+            size += Style.ADAPTER.encodedSizeWithTag(2, value.style)
+          }
+          if (value.text != null) {
+            size += CellTextComponent.ADAPTER.encodedSizeWithTag(3, value.text)
+          }
+          return size
         }
-        if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
-          size += Style.ADAPTER.encodedSizeWithTag(2, value.style)
-        }
-        if (value.text != null) {
-          size += CellTextComponent.ADAPTER.encodedSizeWithTag(3, value.text)
-        }
-        return size
-      }
 
-      override fun encode(writer: ProtoWriter, `value`: CellDividerComponent) {
-        if (value.base != null) {
-          ComponentBase.ADAPTER.encodeWithTag(writer, 1, value.base)
+        override fun encode(writer: ProtoWriter, `value`: CellDividerComponent) {
+          if (value.base != null) {
+            ComponentBase.ADAPTER.encodeWithTag(writer, 1, value.base)
+          }
+          if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
+            Style.ADAPTER.encodeWithTag(writer, 2, value.style)
+          }
+          if (value.text != null) {
+            CellTextComponent.ADAPTER.encodeWithTag(writer, 3, value.text)
+          }
+          writer.writeBytes(value.unknownFields)
         }
-        if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
-          Style.ADAPTER.encodeWithTag(writer, 2, value.style)
-        }
-        if (value.text != null) {
-          CellTextComponent.ADAPTER.encodeWithTag(writer, 3, value.text)
-        }
-        writer.writeBytes(value.unknownFields)
-      }
 
-      override fun encode(writer: ReverseProtoWriter, `value`: CellDividerComponent) {
-        writer.writeBytes(value.unknownFields)
-        if (value.text != null) {
-          CellTextComponent.ADAPTER.encodeWithTag(writer, 3, value.text)
-        }
-        if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
-          Style.ADAPTER.encodeWithTag(writer, 2, value.style)
-        }
-        if (value.base != null) {
-          ComponentBase.ADAPTER.encodeWithTag(writer, 1, value.base)
-        }
-      }
-
-      override fun decode(reader: ProtoReader): CellDividerComponent {
-        var base: ComponentBase? = null
-        var style: Style = Style.STYLE_UNSPECIFIED
-        var text: CellTextComponent? = null
-        val unknownFields = reader.forEachTag { tag ->
-          when (tag) {
-            1 -> base = ComponentBase.ADAPTER.decode(reader)
-            2 -> try {
-              style = Style.ADAPTER.decode(reader)
-            } catch (e: ProtoAdapter.EnumConstantNotFoundException) {
-              reader.addUnknownField(tag, FieldEncoding.VARINT, e.value.toLong())
-            }
-            3 -> text = CellTextComponent.ADAPTER.decode(reader)
-            else -> reader.readUnknownField(tag)
+        override fun encode(writer: ReverseProtoWriter, `value`: CellDividerComponent) {
+          writer.writeBytes(value.unknownFields)
+          if (value.text != null) {
+            CellTextComponent.ADAPTER.encodeWithTag(writer, 3, value.text)
+          }
+          if (value.style != protobuf.source.component.CellDividerComponent.Style.STYLE_UNSPECIFIED) {
+            Style.ADAPTER.encodeWithTag(writer, 2, value.style)
+          }
+          if (value.base != null) {
+            ComponentBase.ADAPTER.encodeWithTag(writer, 1, value.base)
           }
         }
-        return CellDividerComponent(
-          base = base,
-          style = style,
-          text = text,
-          unknownFields = unknownFields
+
+        override fun decode(reader: ProtoReader): CellDividerComponent {
+          var base: ComponentBase? = null
+          var style: Style = Style.STYLE_UNSPECIFIED
+          var text: CellTextComponent? = null
+          val unknownFields = reader.forEachTag { tag ->
+            when (tag) {
+              1 -> base = ComponentBase.ADAPTER.decode(reader)
+              2 -> try {
+                style = Style.ADAPTER.decode(reader)
+              } catch (e: ProtoAdapter.EnumConstantNotFoundException) {
+                reader.addUnknownField(tag, FieldEncoding.VARINT, e.value.toLong())
+              }
+              3 -> text = CellTextComponent.ADAPTER.decode(reader)
+              else -> reader.readUnknownField(tag)
+            }
+          }
+          return CellDividerComponent(
+            base = base,
+            style = style,
+            text = text,
+            unknownFields = unknownFields
+          )
+        }
+
+        override fun redact(`value`: CellDividerComponent): CellDividerComponent = value.copy(
+          base = value.base?.let(ComponentBase.ADAPTER::redact),
+          text = value.text?.let(CellTextComponent.ADAPTER::redact),
+          unknownFields = ByteString.EMPTY
         )
       }
-
-      override fun redact(`value`: CellDividerComponent): CellDividerComponent = value.copy(
-        base = value.base?.let(ComponentBase.ADAPTER::redact),
-        text = value.text?.let(CellTextComponent.ADAPTER::redact),
-        unknownFields = ByteString.EMPTY
-      )
-    }
 
     private const val serialVersionUID: Long = 0L
   }
@@ -194,8 +184,8 @@ public class CellDividerComponent(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<Style> = object : EnumAdapter<Style>(
-        Style::class, 
-        PROTO_3, 
+        Style::class,
+        PROTO_3,
         Style.STYLE_UNSPECIFIED
       ) {
         override fun fromValue(`value`: Int): Style? = Style.fromValue(`value`)

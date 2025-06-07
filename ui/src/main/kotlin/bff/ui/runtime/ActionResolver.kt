@@ -4,7 +4,6 @@ package bff.ui.runtime
 
 import bff.ui.Actions
 import bff.ui.BffUiCodegenException
-import kotlin.collections.List
 import protobuf.source.action.Action
 
 internal object ActionResolver {

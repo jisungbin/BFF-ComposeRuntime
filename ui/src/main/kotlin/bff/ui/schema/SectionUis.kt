@@ -12,9 +12,6 @@ import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScope
 import bff.ui.UiScopeMarker
-import java.lang.IllegalArgumentException
-import kotlin.String
-import kotlin.Unit
 import protobuf.source.section.Section
 
 @UiScopeMarker

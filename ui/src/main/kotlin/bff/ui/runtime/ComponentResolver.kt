@@ -8,7 +8,6 @@ import bff.ui.helper.checkType
 import bff.ui.helper.childOfScope
 import bff.ui.helper.componentBase
 import bff.ui.protoField
-import kotlin.String
 import protobuf.source.component.CellColor
 import protobuf.source.component.CellDividerComponent
 import protobuf.source.component.CellTextComponent

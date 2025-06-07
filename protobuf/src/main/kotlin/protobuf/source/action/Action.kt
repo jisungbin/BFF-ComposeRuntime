@@ -17,19 +17,9 @@ import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireEnum
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.JvmStatic
-import com.squareup.wire.`internal`.sanitize
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.JvmStatic
+import com.squareup.wire.internal.sanitize
 import okio.ByteString
 
 public class Action(
@@ -114,11 +104,11 @@ public class Action(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<Action> = object : ProtoAdapter<Action>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      Action::class, 
-      "type.googleapis.com/protobuf.source.action.Action", 
-      PROTO_3, 
-      null, 
+      FieldEncoding.LENGTH_DELIMITED,
+      Action::class,
+      "type.googleapis.com/protobuf.source.action.Action",
+      PROTO_3,
+      null,
       "action/action.proto"
     ) {
       override fun encodedSize(`value`: Action): Int {
@@ -214,8 +204,8 @@ public class Action(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<Type> = object : EnumAdapter<Type>(
-        Type::class, 
-        PROTO_3, 
+        Type::class,
+        PROTO_3,
         Type.TYPE_UNSPECIFIED
       ) {
         override fun fromValue(`value`: Int): Type? = Type.fromValue(`value`)
@@ -243,8 +233,8 @@ public class Action(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<TriggerCondition> = object : EnumAdapter<TriggerCondition>(
-        TriggerCondition::class, 
-        PROTO_3, 
+        TriggerCondition::class,
+        PROTO_3,
         TriggerCondition.TRIGGER_CONDITION_UNSPECIFIED
       ) {
         override fun fromValue(`value`: Int): TriggerCondition? = TriggerCondition.fromValue(`value`)

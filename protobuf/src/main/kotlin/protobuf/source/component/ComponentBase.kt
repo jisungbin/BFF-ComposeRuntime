@@ -15,21 +15,10 @@ import com.squareup.wire.ProtoWriter
 import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.immutableCopyOf
-import com.squareup.wire.`internal`.redactElements
-import com.squareup.wire.`internal`.sanitize
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
-import kotlin.collections.List
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.immutableCopyOf
+import com.squareup.wire.internal.redactElements
+import com.squareup.wire.internal.sanitize
 import okio.ByteString
 import protobuf.source.action.Action
 import protobuf.source.attributes.Attributes
@@ -108,11 +97,11 @@ public class ComponentBase(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<ComponentBase> = object : ProtoAdapter<ComponentBase>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      ComponentBase::class, 
-      "type.googleapis.com/protobuf.source.component.ComponentBase", 
-      PROTO_3, 
-      null, 
+      FieldEncoding.LENGTH_DELIMITED,
+      ComponentBase::class,
+      "type.googleapis.com/protobuf.source.component.ComponentBase",
+      PROTO_3,
+      null,
       "component/component_base.proto"
     ) {
       override fun encodedSize(`value`: ComponentBase): Int {

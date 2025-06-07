@@ -17,20 +17,9 @@ import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireEnum
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.JvmStatic
-import com.squareup.wire.`internal`.countNonNull
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Float
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.JvmStatic
+import com.squareup.wire.internal.countNonNull
 import okio.ByteString
 
 public class Attributes(
@@ -99,11 +88,11 @@ public class Attributes(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<Attributes> = object : ProtoAdapter<Attributes>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      Attributes::class, 
-      "type.googleapis.com/protobuf.source.attributes.Attributes", 
-      PROTO_3, 
-      null, 
+      FieldEncoding.LENGTH_DELIMITED,
+      Attributes::class,
+      "type.googleapis.com/protobuf.source.attributes.Attributes",
+      PROTO_3,
+      null,
       "attributes/attributes.proto"
     ) {
       override fun encodedSize(`value`: Attributes): Int {
@@ -163,8 +152,8 @@ public class Attributes(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<SizeArea> = object : EnumAdapter<SizeArea>(
-        SizeArea::class, 
-        PROTO_3, 
+        SizeArea::class,
+        PROTO_3,
         SizeArea.SIZE_AREA_UNSPECIFIED
       ) {
         override fun fromValue(`value`: Int): SizeArea? = SizeArea.fromValue(`value`)
@@ -257,11 +246,11 @@ public class Attributes(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<PaddingAttribute> = object : ProtoAdapter<PaddingAttribute>(
-        FieldEncoding.LENGTH_DELIMITED, 
-        PaddingAttribute::class, 
-        "type.googleapis.com/protobuf.source.attributes.Attributes.PaddingAttribute", 
-        PROTO_3, 
-        null, 
+        FieldEncoding.LENGTH_DELIMITED,
+        PaddingAttribute::class,
+        "type.googleapis.com/protobuf.source.attributes.Attributes.PaddingAttribute",
+        PROTO_3,
+        null,
         "attributes/attributes.proto"
       ) {
         override fun encodedSize(`value`: PaddingAttribute): Int {
@@ -403,11 +392,11 @@ public class Attributes(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<SizeAttribute> = object : ProtoAdapter<SizeAttribute>(
-        FieldEncoding.LENGTH_DELIMITED, 
-        SizeAttribute::class, 
-        "type.googleapis.com/protobuf.source.attributes.Attributes.SizeAttribute", 
-        PROTO_3, 
-        null, 
+        FieldEncoding.LENGTH_DELIMITED,
+        SizeAttribute::class,
+        "type.googleapis.com/protobuf.source.attributes.Attributes.SizeAttribute",
+        PROTO_3,
+        null,
         "attributes/attributes.proto"
       ) {
         override fun encodedSize(`value`: SizeAttribute): Int {

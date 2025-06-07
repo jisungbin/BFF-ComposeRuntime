@@ -11,7 +11,6 @@ import bff.ui.ProtobufApplier
 import bff.ui.ProtobufNode
 import bff.ui.UiScope
 import bff.ui.UiScopeMarker
-import kotlin.Unit
 
 @UiScopeMarker
 public sealed interface ScreenScope {

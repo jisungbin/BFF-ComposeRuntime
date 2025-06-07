@@ -6,9 +6,6 @@ import androidx.collection.mutableIntObjectMapOf
 import bff.ui.Attribute
 import bff.ui.Attributes
 import bff.ui.then
-import java.lang.IllegalArgumentException
-import kotlin.Any
-import kotlin.Float
 import protobuf.source.attributes.Attributes as ProtoAttributes
 
 public typealias ProtoSizeArea = ProtoAttributes.SizeArea

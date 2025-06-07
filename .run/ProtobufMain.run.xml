@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ProtobufMain" type="JetRunConfigurationType">
-    <option name="MAIN_CLASS_NAME" value="protobuf.generator.MainKt" />
-    <module name="BFF-ComposeRuntime.protobuf.main" />
-    <shortenClasspath name="NONE" />
+  <configuration name="ProtobufMain" default="false" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="protobuf.generator.MainKt"/>
+    <module name="BFF-ComposeRuntime.protobuf.main"/>
+    <shortenClasspath name="NONE"/>
     <method v="2">
-      <option name="Make" enabled="true" />
+      <option name="Make" enabled="true"/>
     </method>
   </configuration>
 </component>

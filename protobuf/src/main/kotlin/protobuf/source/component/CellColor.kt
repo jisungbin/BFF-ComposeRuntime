@@ -11,10 +11,8 @@ import com.squareup.wire.EnumAdapter
 import com.squareup.wire.ProtoAdapter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireEnum
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.JvmStatic
-import kotlin.Int
-import kotlin.Suppress
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.JvmStatic
 
 public enum class CellColor(
   override val `value`: Int,
@@ -27,8 +25,8 @@ public enum class CellColor(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<CellColor> = object : EnumAdapter<CellColor>(
-      CellColor::class, 
-      PROTO_3, 
+      CellColor::class,
+      PROTO_3,
       CellColor.CELL_COLOR_UNSPECIFIED
     ) {
       override fun fromValue(`value`: Int): CellColor? = CellColor.fromValue(`value`)

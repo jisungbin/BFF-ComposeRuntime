@@ -13,8 +13,6 @@ import bff.ui.helper.checkTypeIfNotNull
 import bff.ui.protoField
 import bff.ui.runtime.WidgetContentResolver.cellDivider
 import bff.ui.runtime.WidgetContentResolver.searchHospitalA
-import kotlin.Boolean
-import kotlin.String
 import protobuf.source.response.Response
 import protobuf.source.screen.Screen
 import protobuf.source.section.Section
@@ -40,7 +38,7 @@ internal object ModelBuilder {
 
     val scope = checkScope<UiScope.Screen>(node)
     val type = Screen.Type.fromValue(scope.type)
-        ?: throw BffUiCodegenException("""${scope.type} is not a valid Screen.Type tag.""")
+      ?: throw BffUiCodegenException("""${scope.type} is not a valid Screen.Type tag.""")
 
     return Screen(
       id = node.id,
@@ -59,7 +57,7 @@ internal object ModelBuilder {
 
     val scope = checkScope<UiScope.Section>(node)
     val type = Section.Type.fromValue(scope.type)
-        ?: throw BffUiCodegenException("""${scope.type} is not a valid Section.Type tag.""")
+      ?: throw BffUiCodegenException("""${scope.type} is not a valid Section.Type tag.""")
 
     return Section(
       id = node.id,

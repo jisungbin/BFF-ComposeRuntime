@@ -15,21 +15,10 @@ import com.squareup.wire.ProtoWriter
 import com.squareup.wire.ReverseProtoWriter
 import com.squareup.wire.Syntax.PROTO_3
 import com.squareup.wire.WireField
-import com.squareup.wire.`internal`.JvmField
-import com.squareup.wire.`internal`.immutableCopyOf
-import com.squareup.wire.`internal`.redactElements
-import com.squareup.wire.`internal`.sanitize
-import kotlin.Any
-import kotlin.AssertionError
-import kotlin.Boolean
-import kotlin.Deprecated
-import kotlin.DeprecationLevel
-import kotlin.Int
-import kotlin.Long
-import kotlin.Nothing
-import kotlin.String
-import kotlin.Suppress
-import kotlin.collections.List
+import com.squareup.wire.internal.JvmField
+import com.squareup.wire.internal.immutableCopyOf
+import com.squareup.wire.internal.redactElements
+import com.squareup.wire.internal.sanitize
 import okio.ByteString
 import protobuf.source.screen.Screen
 import protobuf.source.widget.Widget
@@ -107,11 +96,11 @@ public class Response(
   public companion object {
     @JvmField
     public val ADAPTER: ProtoAdapter<Response> = object : ProtoAdapter<Response>(
-      FieldEncoding.LENGTH_DELIMITED, 
-      Response::class, 
-      "type.googleapis.com/protobuf.source.response.Response", 
-      PROTO_3, 
-      null, 
+      FieldEncoding.LENGTH_DELIMITED,
+      Response::class,
+      "type.googleapis.com/protobuf.source.response.Response",
+      PROTO_3,
+      null,
       "response/response.proto"
     ) {
       override fun encodedSize(`value`: Response): Int {
@@ -226,11 +215,11 @@ public class Response(
     public companion object {
       @JvmField
       public val ADAPTER: ProtoAdapter<Error> = object : ProtoAdapter<Error>(
-        FieldEncoding.LENGTH_DELIMITED, 
-        Error::class, 
-        "type.googleapis.com/protobuf.source.response.Response.Error", 
-        PROTO_3, 
-        null, 
+        FieldEncoding.LENGTH_DELIMITED,
+        Error::class,
+        "type.googleapis.com/protobuf.source.response.Response.Error",
+        PROTO_3,
+        null,
         "response/response.proto"
       ) {
         override fun encodedSize(`value`: Error): Int {

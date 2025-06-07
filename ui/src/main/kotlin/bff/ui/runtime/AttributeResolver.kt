@@ -4,9 +4,6 @@ package bff.ui.runtime
 
 import androidx.collection.IntObjectMap
 import bff.ui.BffUiCodegenException
-import kotlin.Any
-import kotlin.Float
-import kotlin.collections.List
 import bff.ui.Attributes as UiAttributes
 import protobuf.source.attributes.Attributes as ProtoAttributes
 import protobuf.source.attributes.Attributes.PaddingAttribute as ProtoPaddingAttribute
@@ -34,15 +31,19 @@ internal object AttributeResolver {
   )
 
   private fun size(arguments: IntObjectMap<Any>): ProtoSizeAttribute = ProtoSizeAttribute(
-    area = arguments[1] as? ProtoAttributes.SizeArea ?: throw BffUiCodegenException("""
+    area = arguments[1] as? ProtoAttributes.SizeArea ?: throw BffUiCodegenException(
+      """
         |Expected type is protobuf.source.attributes.Attributes.SizeArea, but was 
         |${arguments[1]?.javaClass?.canonicalName}.
-        """.trimMargin()),
+        """.trimMargin()
+    ),
     min_value = arguments[2] as? Float,
-    default_value = arguments[3] as? Float ?: throw BffUiCodegenException("""
+    default_value = arguments[3] as? Float ?: throw BffUiCodegenException(
+      """
         |Expected type is kotlin.Float, but was 
         |${arguments[3]?.javaClass?.canonicalName}.
-        """.trimMargin()),
+        """.trimMargin()
+    ),
     max_value = arguments[4] as? Float,
   )
 }
