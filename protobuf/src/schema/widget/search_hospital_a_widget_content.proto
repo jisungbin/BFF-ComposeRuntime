@@ -16,7 +16,7 @@ message SearchHospitalAWidgetContent {
     optional component.CellTextComponent title = 4;
     optional component.CellTextComponent cost = 5;
     component.CellDividerComponent divider = 6;
-    BEventChildWidget b_event_items = 7;
+    repeated BEventChildWidget b_event_items = 7;
   }
 
   message BEventChildWidget {
@@ -32,5 +32,5 @@ message SearchHospitalAWidgetContent {
   repeated component.CellTextComponent hospital_name = 1;
   repeated component.CellTextComponent info_text = 2;
   component.CellDividerComponent divider = 3;
-  optional AEventChildWidget a_event_items = 4;
+  optional AEventChildWidget a_event_item = 4;
 }

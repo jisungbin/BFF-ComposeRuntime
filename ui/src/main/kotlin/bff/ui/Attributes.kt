@@ -1,4 +1,4 @@
-package bff.ui.attribute
+package bff.ui
 
 import androidx.collection.IntObjectMap
 import androidx.collection.MutableObjectList

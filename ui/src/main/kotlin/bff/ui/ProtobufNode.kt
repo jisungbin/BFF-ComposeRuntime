@@ -1,44 +1,72 @@
 package bff.ui
 
-import androidx.collection.ObjectList
-import androidx.collection.mutableObjectListOf
 import androidx.compose.runtime.Updater
-import bff.ui.action.Actions
-import bff.ui.attribute.Attributes
+import androidx.compose.runtime.collection.mutableVectorOf
+import bff.ui.runtime.ModelBuilder
+import java.util.Collections
 import kotlin.properties.Delegates
+import protobuf.source.response.Response
 
-internal class ProtobufNode {
+internal open class ProtobufNode private constructor() {
   internal lateinit var id: String
   internal lateinit var attributes: Attributes
   internal lateinit var actions: Actions
   internal lateinit var scope: UiScope
 
   internal val data: ProtobufData = ProtobufData()
-  internal var compositeKeyHash by Delegates.notNull<Int>()
+  internal var childIndex by Delegates.notNull<Int>()
 
-  private val _children = mutableObjectListOf<ProtobufNode>()
-  internal val children: ObjectList<ProtobufNode> get() = _children
+  @Suppress("PropertyName")
+  protected val _children = mutableVectorOf<ProtobufNode>()
+  internal val children: List<ProtobufNode>
+    get() = Collections.unmodifiableList(_children.asMutableList())
 
   internal fun insertAt(index: Int, node: ProtobufNode) {
+    node.childIndex = index
     _children.add(index, node)
   }
 
-  internal fun clear() {
-    _children.clear()
-  }
+  override fun toString(): String =
+    if (::scope.isInitialized) "${scope.idString()}@${hashCode().toString(16)}" else super.toString()
 
-  internal fun buildModel(): Any = TODO()
+  internal class Root : ProtobufNode() {
+    init {
+      id = "root"
+      attributes = Attributes
+      actions = Actions
+      scope = UiScope.Root
+    }
+
+    internal fun response(): Response = ModelBuilder.buildResponse(this)
+
+    internal fun clear() {
+      _children.clear()
+      data.clear()
+    }
+  }
 
   internal companion object {
     internal val CONSTRUCTOR = ::ProtobufNode
-    internal val INIT: Updater<ProtobufNode>.(Attributes, Actions, UiScope, Int) -> Unit =
-      { attributes, actions, scope, compositeKeyHash ->
+    internal val INIT: Updater<ProtobufNode>.(Attributes, Actions, UiScope, ProtobufApplier) -> Unit =
+      { attributes, actions, scope, applier ->
         init {
+          this.id = applier.calculateStackBasedId(scope, "child", childIndex)
           this.attributes = attributes
-          this.actions = actions
+          this.actions = actions.initializeIds { _, index ->
+            applier.calculateStackBasedId(scope, "action", index)
+          }
           this.scope = scope
-          this.compositeKeyHash = compositeKeyHash
         }
       }
   }
+}
+
+private fun ProtobufApplier.calculateStackBasedId(
+  scope: UiScope,
+  prefix: String,
+  index: Int,
+): String {
+  // stack.size == 1 은 stack=[root] 상태임
+  val previousNode = if (stack.size == 1) null else stack.last()
+  return "${previousNode?.id?.plus('_').orEmpty()}${scope.idString()}-$prefix$index"
 }

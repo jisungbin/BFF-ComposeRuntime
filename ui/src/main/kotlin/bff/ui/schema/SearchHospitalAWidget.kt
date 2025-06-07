@@ -4,14 +4,14 @@ package bff.ui.schema
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
-import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.currentComposer
+import bff.ui.Actions
+import bff.ui.Attributes
 import bff.ui.ProtobufApplier
 import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
-import bff.ui.UiScope.ChildWidgetOrComponent
+import bff.ui.UiScope
 import bff.ui.UiScopeMarker
-import bff.ui.action.Actions
-import bff.ui.attribute.Attributes
 import kotlin.String
 import kotlin.Unit
 import protobuf.source.component.CellColor
@@ -19,15 +19,15 @@ import protobuf.source.component.CellDividerComponent
 import protobuf.source.component.CellTextStyle
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsScope {
+public sealed interface SearchHospitalAAEventItemScope {
   @Composable
   public fun AEventChildWidget(
     attributes: Attributes = Attributes,
     actions: Actions = Actions,
-    title: @Composable SearchHospitalAAEventItemsTitleScope.() -> Unit = {},
-    cost: @Composable SearchHospitalAAEventItemsCostScope.() -> Unit = {},
-    divider: @Composable SearchHospitalAAEventItemsDividerScope.() -> Unit,
-    bEventItems: @Composable SearchHospitalAAEventItemsBEventItemsScope.() -> Unit,
+    title: @Composable SearchHospitalAAEventItemTitleScope.() -> Unit = {},
+    cost: @Composable SearchHospitalAAEventItemCostScope.() -> Unit = {},
+    divider: @Composable SearchHospitalAAEventItemDividerScope.() -> Unit,
+    bEventItems: @Composable SearchHospitalAAEventItemBEventItemsScope.() -> Unit,
   )
 }
 
@@ -67,7 +67,7 @@ public sealed interface SearchHospitalADividerScope {
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsTitleScope {
+public sealed interface SearchHospitalAAEventItemTitleScope {
   @Composable
   public fun CellTextComponent(
     attributes: Attributes = Attributes,
@@ -79,7 +79,7 @@ public sealed interface SearchHospitalAAEventItemsTitleScope {
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsCostScope {
+public sealed interface SearchHospitalAAEventItemCostScope {
   @Composable
   public fun CellTextComponent(
     attributes: Attributes = Attributes,
@@ -91,25 +91,25 @@ public sealed interface SearchHospitalAAEventItemsCostScope {
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsDividerScope {
+public sealed interface SearchHospitalAAEventItemDividerScope {
   @Composable
   public fun CellDividerComponent(
     attributes: Attributes = Attributes,
     actions: Actions = Actions,
     style: CellDividerComponent.Style,
-    text: @Composable SearchHospitalAAEventItemsDividerTextScope.() -> Unit,
+    text: @Composable SearchHospitalAAEventItemDividerTextScope.() -> Unit,
   )
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsBEventItemsScope {
+public sealed interface SearchHospitalAAEventItemBEventItemsScope {
   @Composable
   public fun BEventChildWidget(
     attributes: Attributes = Attributes,
     actions: Actions = Actions,
-    title: @Composable SearchHospitalAAEventItemsBEventItemsTitleScope.() -> Unit = {},
-    cost: @Composable SearchHospitalAAEventItemsBEventItemsCostScope.() -> Unit = {},
-    divider: @Composable SearchHospitalAAEventItemsBEventItemsDividerScope.() -> Unit,
+    title: @Composable SearchHospitalAAEventItemBEventItemsTitleScope.() -> Unit = {},
+    cost: @Composable SearchHospitalAAEventItemBEventItemsCostScope.() -> Unit = {},
+    divider: @Composable SearchHospitalAAEventItemBEventItemsDividerScope.() -> Unit,
   )
 }
 
@@ -126,7 +126,7 @@ public sealed interface SearchHospitalADividerTextScope {
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsDividerTextScope {
+public sealed interface SearchHospitalAAEventItemDividerTextScope {
   @Composable
   public fun CellTextComponent(
     attributes: Attributes = Attributes,
@@ -138,7 +138,7 @@ public sealed interface SearchHospitalAAEventItemsDividerTextScope {
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsBEventItemsTitleScope {
+public sealed interface SearchHospitalAAEventItemBEventItemsTitleScope {
   @Composable
   public fun CellTextComponent(
     attributes: Attributes = Attributes,
@@ -150,7 +150,7 @@ public sealed interface SearchHospitalAAEventItemsBEventItemsTitleScope {
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsBEventItemsCostScope {
+public sealed interface SearchHospitalAAEventItemBEventItemsCostScope {
   @Composable
   public fun CellTextComponent(
     attributes: Attributes = Attributes,
@@ -162,18 +162,18 @@ public sealed interface SearchHospitalAAEventItemsBEventItemsCostScope {
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsBEventItemsDividerScope {
+public sealed interface SearchHospitalAAEventItemBEventItemsDividerScope {
   @Composable
   public fun CellDividerComponent(
     attributes: Attributes = Attributes,
     actions: Actions = Actions,
     style: CellDividerComponent.Style,
-    text: @Composable SearchHospitalAAEventItemsBEventItemsDividerTextScope.() -> Unit,
+    text: @Composable SearchHospitalAAEventItemBEventItemsDividerTextScope.() -> Unit,
   )
 }
 
 @UiScopeMarker
-public sealed interface SearchHospitalAAEventItemsBEventItemsDividerTextScope {
+public sealed interface SearchHospitalAAEventItemBEventItemsDividerTextScope {
   @Composable
   public fun CellTextComponent(
     attributes: Attributes = Attributes,
@@ -184,17 +184,17 @@ public sealed interface SearchHospitalAAEventItemsBEventItemsDividerTextScope {
   )
 }
 
-internal data object SearchHospitalAAEventItemsScopeProvider : SearchHospitalAAEventItemsScope {
+internal data object SearchHospitalAAEventItemScopeProvider : SearchHospitalAAEventItemScope {
   @Composable
   override fun AEventChildWidget(
     attributes: Attributes,
     actions: Actions,
-    title: @Composable SearchHospitalAAEventItemsTitleScope.() -> Unit,
-    cost: @Composable SearchHospitalAAEventItemsCostScope.() -> Unit,
-    divider: @Composable SearchHospitalAAEventItemsDividerScope.() -> Unit,
-    bEventItems: @Composable SearchHospitalAAEventItemsBEventItemsScope.() -> Unit,
+    title: @Composable SearchHospitalAAEventItemTitleScope.() -> Unit,
+    cost: @Composable SearchHospitalAAEventItemCostScope.() -> Unit,
+    divider: @Composable SearchHospitalAAEventItemDividerScope.() -> Unit,
+    bEventItems: @Composable SearchHospitalAAEventItemBEventItemsScope.() -> Unit,
   ) {
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -203,15 +203,15 @@ internal data object SearchHospitalAAEventItemsScopeProvider : SearchHospitalAAE
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(4),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(4),
+          applier,
         )
       },
     ) {
-      SearchHospitalAAEventItemsTitleScopeProvider.title()
-      SearchHospitalAAEventItemsCostScopeProvider.cost()
-      SearchHospitalAAEventItemsDividerScopeProvider.divider()
-      SearchHospitalAAEventItemsBEventItemsScopeProvider.bEventItems()
+      SearchHospitalAAEventItemTitleScopeProvider.title()
+      SearchHospitalAAEventItemCostScopeProvider.cost()
+      SearchHospitalAAEventItemDividerScopeProvider.divider()
+      SearchHospitalAAEventItemBEventItemsScopeProvider.bEventItems()
     }
   }
 }
@@ -226,18 +226,18 @@ internal data object SearchHospitalAHospitalNameScopeProvider : SearchHospitalAH
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -246,8 +246,8 @@ internal data object SearchHospitalAHospitalNameScopeProvider : SearchHospitalAH
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(1),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(1),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -255,8 +255,7 @@ internal data object SearchHospitalAHospitalNameScopeProvider : SearchHospitalAH
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
@@ -270,18 +269,18 @@ internal data object SearchHospitalAInfoTextScopeProvider : SearchHospitalAInfoT
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -290,8 +289,8 @@ internal data object SearchHospitalAInfoTextScopeProvider : SearchHospitalAInfoT
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(2),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(2),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -299,8 +298,7 @@ internal data object SearchHospitalAInfoTextScopeProvider : SearchHospitalAInfoT
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
@@ -313,12 +311,12 @@ internal data object SearchHospitalADividerScopeProvider : SearchHospitalADivide
     text: @Composable SearchHospitalADividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -327,8 +325,8 @@ internal data object SearchHospitalADividerScopeProvider : SearchHospitalADivide
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(3),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(3),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -340,7 +338,7 @@ internal data object SearchHospitalADividerScopeProvider : SearchHospitalADivide
   }
 }
 
-internal data object SearchHospitalAAEventItemsTitleScopeProvider : SearchHospitalAAEventItemsTitleScope {
+internal data object SearchHospitalAAEventItemTitleScopeProvider : SearchHospitalAAEventItemTitleScope {
   @Composable
   override fun CellTextComponent(
     attributes: Attributes,
@@ -350,18 +348,18 @@ internal data object SearchHospitalAAEventItemsTitleScopeProvider : SearchHospit
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -370,8 +368,8 @@ internal data object SearchHospitalAAEventItemsTitleScopeProvider : SearchHospit
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(4),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(4),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -379,12 +377,11 @@ internal data object SearchHospitalAAEventItemsTitleScopeProvider : SearchHospit
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
-internal data object SearchHospitalAAEventItemsCostScopeProvider : SearchHospitalAAEventItemsCostScope {
+internal data object SearchHospitalAAEventItemCostScopeProvider : SearchHospitalAAEventItemCostScope {
   @Composable
   override fun CellTextComponent(
     attributes: Attributes,
@@ -394,18 +391,18 @@ internal data object SearchHospitalAAEventItemsCostScopeProvider : SearchHospita
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -414,8 +411,8 @@ internal data object SearchHospitalAAEventItemsCostScopeProvider : SearchHospita
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(5),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(5),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -423,26 +420,25 @@ internal data object SearchHospitalAAEventItemsCostScopeProvider : SearchHospita
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
-internal data object SearchHospitalAAEventItemsDividerScopeProvider : SearchHospitalAAEventItemsDividerScope {
+internal data object SearchHospitalAAEventItemDividerScopeProvider : SearchHospitalAAEventItemDividerScope {
   @Composable
   override fun CellDividerComponent(
     attributes: Attributes,
     actions: Actions,
     style: CellDividerComponent.Style,
-    text: @Composable SearchHospitalAAEventItemsDividerTextScope.() -> Unit,
+    text: @Composable SearchHospitalAAEventItemDividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -451,29 +447,29 @@ internal data object SearchHospitalAAEventItemsDividerScopeProvider : SearchHosp
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(6),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(6),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
         }
       },
     ) {
-      SearchHospitalAAEventItemsDividerTextScopeProvider.text()
+      SearchHospitalAAEventItemDividerTextScopeProvider.text()
     }
   }
 }
 
-internal data object SearchHospitalAAEventItemsBEventItemsScopeProvider : SearchHospitalAAEventItemsBEventItemsScope {
+internal data object SearchHospitalAAEventItemBEventItemsScopeProvider : SearchHospitalAAEventItemBEventItemsScope {
   @Composable
   override fun BEventChildWidget(
     attributes: Attributes,
     actions: Actions,
-    title: @Composable SearchHospitalAAEventItemsBEventItemsTitleScope.() -> Unit,
-    cost: @Composable SearchHospitalAAEventItemsBEventItemsCostScope.() -> Unit,
-    divider: @Composable SearchHospitalAAEventItemsBEventItemsDividerScope.() -> Unit,
+    title: @Composable SearchHospitalAAEventItemBEventItemsTitleScope.() -> Unit,
+    cost: @Composable SearchHospitalAAEventItemBEventItemsCostScope.() -> Unit,
+    divider: @Composable SearchHospitalAAEventItemBEventItemsDividerScope.() -> Unit,
   ) {
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -482,14 +478,14 @@ internal data object SearchHospitalAAEventItemsBEventItemsScopeProvider : Search
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(7),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(7),
+          applier,
         )
       },
     ) {
-      SearchHospitalAAEventItemsBEventItemsTitleScopeProvider.title()
-      SearchHospitalAAEventItemsBEventItemsCostScopeProvider.cost()
-      SearchHospitalAAEventItemsBEventItemsDividerScopeProvider.divider()
+      SearchHospitalAAEventItemBEventItemsTitleScopeProvider.title()
+      SearchHospitalAAEventItemBEventItemsCostScopeProvider.cost()
+      SearchHospitalAAEventItemBEventItemsDividerScopeProvider.divider()
     }
   }
 }
@@ -504,18 +500,18 @@ internal data object SearchHospitalADividerTextScopeProvider : SearchHospitalADi
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -524,8 +520,8 @@ internal data object SearchHospitalADividerTextScopeProvider : SearchHospitalADi
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(3),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(3),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -533,12 +529,11 @@ internal data object SearchHospitalADividerTextScopeProvider : SearchHospitalADi
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
-internal data object SearchHospitalAAEventItemsDividerTextScopeProvider : SearchHospitalAAEventItemsDividerTextScope {
+internal data object SearchHospitalAAEventItemDividerTextScopeProvider : SearchHospitalAAEventItemDividerTextScope {
   @Composable
   override fun CellTextComponent(
     attributes: Attributes,
@@ -548,18 +543,18 @@ internal data object SearchHospitalAAEventItemsDividerTextScopeProvider : Search
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -568,8 +563,8 @@ internal data object SearchHospitalAAEventItemsDividerTextScopeProvider : Search
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(3),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(3),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -577,12 +572,11 @@ internal data object SearchHospitalAAEventItemsDividerTextScopeProvider : Search
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
-internal data object SearchHospitalAAEventItemsBEventItemsTitleScopeProvider : SearchHospitalAAEventItemsBEventItemsTitleScope {
+internal data object SearchHospitalAAEventItemBEventItemsTitleScopeProvider : SearchHospitalAAEventItemBEventItemsTitleScope {
   @Composable
   override fun CellTextComponent(
     attributes: Attributes,
@@ -592,18 +586,18 @@ internal data object SearchHospitalAAEventItemsBEventItemsTitleScopeProvider : S
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -612,8 +606,8 @@ internal data object SearchHospitalAAEventItemsBEventItemsTitleScopeProvider : S
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(4),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(4),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -621,12 +615,11 @@ internal data object SearchHospitalAAEventItemsBEventItemsTitleScopeProvider : S
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
-internal data object SearchHospitalAAEventItemsBEventItemsCostScopeProvider : SearchHospitalAAEventItemsBEventItemsCostScope {
+internal data object SearchHospitalAAEventItemBEventItemsCostScopeProvider : SearchHospitalAAEventItemBEventItemsCostScope {
   @Composable
   override fun CellTextComponent(
     attributes: Attributes,
@@ -636,18 +629,18 @@ internal data object SearchHospitalAAEventItemsBEventItemsCostScopeProvider : Se
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -656,8 +649,8 @@ internal data object SearchHospitalAAEventItemsBEventItemsCostScopeProvider : Se
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(5),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(5),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -665,26 +658,25 @@ internal data object SearchHospitalAAEventItemsBEventItemsCostScopeProvider : Se
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }
 
-internal data object SearchHospitalAAEventItemsBEventItemsDividerScopeProvider : SearchHospitalAAEventItemsBEventItemsDividerScope {
+internal data object SearchHospitalAAEventItemBEventItemsDividerScopeProvider : SearchHospitalAAEventItemBEventItemsDividerScope {
   @Composable
   override fun CellDividerComponent(
     attributes: Attributes,
     actions: Actions,
     style: CellDividerComponent.Style,
-    text: @Composable SearchHospitalAAEventItemsBEventItemsDividerTextScope.() -> Unit,
+    text: @Composable SearchHospitalAAEventItemBEventItemsDividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -693,20 +685,20 @@ internal data object SearchHospitalAAEventItemsBEventItemsDividerScopeProvider :
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(6),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(6),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
         }
       },
     ) {
-      SearchHospitalAAEventItemsBEventItemsDividerTextScopeProvider.text()
+      SearchHospitalAAEventItemBEventItemsDividerTextScopeProvider.text()
     }
   }
 }
 
-internal data object SearchHospitalAAEventItemsBEventItemsDividerTextScopeProvider : SearchHospitalAAEventItemsBEventItemsDividerTextScope {
+internal data object SearchHospitalAAEventItemBEventItemsDividerTextScopeProvider : SearchHospitalAAEventItemBEventItemsDividerTextScope {
   @Composable
   override fun CellTextComponent(
     attributes: Attributes,
@@ -716,18 +708,18 @@ internal data object SearchHospitalAAEventItemsBEventItemsDividerTextScopeProvid
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -736,8 +728,8 @@ internal data object SearchHospitalAAEventItemsBEventItemsDividerTextScopeProvid
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(3),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(3),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -745,7 +737,6 @@ internal data object SearchHospitalAAEventItemsBEventItemsDividerTextScopeProvid
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }

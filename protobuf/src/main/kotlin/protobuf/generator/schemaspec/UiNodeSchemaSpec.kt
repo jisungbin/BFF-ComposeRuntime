@@ -1,4 +1,4 @@
-package protobuf.generator.spec
+package protobuf.generator.schemaspec
 
 import androidx.compose.runtime.Composable
 import com.squareup.kotlinpoet.AnnotationSpec
@@ -13,30 +13,38 @@ import com.squareup.kotlinpoet.KModifier.OVERRIDE
 import com.squareup.kotlinpoet.KModifier.SEALED
 import com.squareup.kotlinpoet.LambdaTypeName
 import com.squareup.kotlinpoet.MemberName
-import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.tag
 import com.squareup.kotlinpoet.withIndent
-import com.squareup.wire.schema.EnumConstant
 import com.squareup.wire.schema.EnumType
 import com.squareup.wire.schema.MessageType
 import com.squareup.wire.schema.ProtoType
 import protobuf.Schemas
 import protobuf.generator.GENERATED_COMMENT
-import protobuf.generator.UiGenerator.UI_GENERATED_PACKAGE
+import protobuf.generator.Names.ActionsCn
+import protobuf.generator.Names.AttributesCn
+import protobuf.generator.Names.ProtobufApplierCn
+import protobuf.generator.Names.ProtobufFieldTagCn
+import protobuf.generator.Names.ProtobufNodeCn
+import protobuf.generator.Names.UiScopeCn
+import protobuf.generator.Names.UiScopeMarkerCn
+import protobuf.generator.SchemaGenerator.SCHEMA_GENERATED_PACKAGE
 import protobuf.generator.addNullSafeStatement
 import protobuf.generator.applyIf
 import protobuf.generator.className
+import protobuf.generator.enumValidatorCode
 import protobuf.generator.isOptional
+import protobuf.generator.schemaspec.MessageProtoTag.Companion.protoTag
+import protobuf.generator.schemaspec.MessageProtoType.Companion.protoType
+import protobuf.generator.schemaspec.UiScopeMarker.Companion.provider
 import protobuf.generator.snakeToCamel
 import protobuf.generator.snakeToPascal
-import protobuf.generator.spec.AttributeSpec.AttributesCn
-import protobuf.generator.spec.MessageProtoTag.Companion.protoTag
-import protobuf.generator.spec.MessageProtoType.Companion.protoType
-import protobuf.generator.spec.UiScopeMarker.Companion.provider
+import protobuf.source.screen.Screen
+import protobuf.source.section.Section
+import protobuf.source.widget.Widget
 
 @JvmInline private value class MessageProtoTag(val tag: Int) {
   companion object {
@@ -44,9 +52,9 @@ import protobuf.generator.spec.UiScopeMarker.Companion.provider
   }
 }
 
-@JvmInline private value class MessageProtoType(val type: ProtoType) {
+@JvmInline internal value class MessageProtoType(val type: ProtoType) {
   companion object {
-    fun ParameterSpec.protoType(): ProtoType = tag<MessageProtoType>()!!.type
+    internal fun ParameterSpec.protoType(): ProtoType = tag<MessageProtoType>()!!.type
   }
 }
 
@@ -95,28 +103,19 @@ private data class NodeParameters(
   val uiParameters: List<ParameterSpec>,
 )
 
-internal object UiNodeSpec {
-  private val ActionsCn = ClassName("bff.ui.action", "Actions")
-  private val UiScopeCn = ClassName("bff.ui", "UiScope")
-  private val UiScopeMarkerCn = ClassName("bff.ui", "UiScopeMarker")
-
-  private val ProtobufNodeCn = ClassName("bff.ui", "ProtobufNode")
-  private val ProtobufApplierCn = ClassName("bff.ui", "ProtobufApplier")
-  private val ProtobufFieldTagCn = ClassName("bff.ui", "ProtobufFieldTag")
-
-  private val wellKnownFieldNames =
+internal object UiNodeSchemaSpec {
+  internal val WellKnownFieldNames =
     listOf(
-      "id",
-      "attributes",
-      "actions",
-      "base",
-      "type",
-      "sections",
-      "widgets",
-      "content",
+      "id", // base field
+      "attributes", // base field
+      "actions", // base field
+      "type", // screen, section's required field
+      "sections", // screen's required field
+      "widgets", // section's required field
+      "content", // widget's required field
+      "base", // component's required field
     )
 
-  // TODO(dx) widgets, components 코드젠 패키지 분리 (하위 패키지로 나누기)
   internal fun uiNodeFiles(): List<FileSpec> {
     fun MessageType.enumUiTypes(): List<UiType> =
       (nestedTypes.first { it is EnumType && it.name == "Type" } as EnumType)
@@ -145,7 +144,7 @@ internal object UiNodeSpec {
 
 
     val protobufUiScope =
-      uiScopeMarker(ClassName(UI_GENERATED_PACKAGE, "ProtobufUiScope"), screenUiFunctions)
+      uiScopeMarker(ClassName(SCHEMA_GENERATED_PACKAGE, "ProtobufUiScope"), screenUiFunctions)
 
     val screenContentUiScopeCn =
       screenUiFunctions.first()
@@ -184,28 +183,28 @@ internal object UiNodeSpec {
 
 
     val screenFile =
-      FileSpec.builder(UI_GENERATED_PACKAGE, "ScreenUis")
+      FileSpec.builder(SCHEMA_GENERATED_PACKAGE, "ScreenUis")
         .addFileComment(GENERATED_COMMENT)
         .addType(protobufUiScope.scopeInterface)
         .addType(protobufUiScope.scopeProvider)
         .build()
 
     val sectionFile =
-      FileSpec.builder(UI_GENERATED_PACKAGE, "SectionUis")
+      FileSpec.builder(SCHEMA_GENERATED_PACKAGE, "SectionUis")
         .addFileComment(GENERATED_COMMENT)
         .addType(screenUiScopeMarker.scopeInterface)
         .addType(screenUiScopeMarker.scopeProvider)
         .build()
 
     val widgetFile =
-      FileSpec.builder(UI_GENERATED_PACKAGE, "WidgetScope")
+      FileSpec.builder(SCHEMA_GENERATED_PACKAGE, "WidgetScope")
         .addFileComment(GENERATED_COMMENT)
         .addType(sectionUiScopeMarker.scopeInterface)
         .addType(sectionUiScopeMarker.scopeProvider)
         .build()
 
     val childWidgetOrComponentFiles = Array(widgetUiFunctions.size) { index ->
-      FileSpec.builder(UI_GENERATED_PACKAGE, widgetUiFunctions[index].name)
+      FileSpec.builder(SCHEMA_GENERATED_PACKAGE, widgetUiFunctions[index].name)
         .addFileComment(GENERATED_COMMENT)
         .addTypes(widgetUiScopeMarkers[index].map { it.scopeInterface })
         .addTypes(widgetUiScopeMarkers[index].map { it.scopeProvider })
@@ -230,7 +229,7 @@ internal object UiNodeSpec {
 
     val functionName: String
     val fieldTag: Int
-    val currentCompositeKeyHashMn = MemberName("androidx.compose.runtime", "currentCompositeKeyHash")
+    val currentComposerMn = MemberName("androidx.compose.runtime", "currentComposer")
 
     when (uiNode) {
       is UiNode.Screen, is UiNode.Section, is UiNode.Widget -> {
@@ -252,14 +251,20 @@ internal object UiNodeSpec {
       .addParameters(
         uiParameters.sortedWith(
           compareBy<ParameterSpec> { it.defaultValue == null }
-            .thenBy { it.protoType().simpleName.endsWith("ChildWidget") },
+            .thenBy {
+              it.protoType().simpleName == Screen::class.simpleName ||
+                it.protoType().simpleName == Section::class.simpleName ||
+                it.protoType().simpleName == Widget::class.simpleName ||
+                it.protoType().simpleName.endsWith("WidgetContent") ||
+                it.protoType().simpleName.endsWith("ChildWidget")
+            },
         ),
       )
       .applyIf(uiNode.contentParamName != null) {
         addParameter(
           uiNode.contentParamName!!,
           LambdaTypeName.get(
-            receiver = ClassName(UI_GENERATED_PACKAGE, uiNode.contentUiScopeName!!),
+            receiver = ClassName(SCHEMA_GENERATED_PACKAGE, uiNode.contentUiScopeName!!),
             returnType = UNIT,
           )
             .copy(annotations = listOf(AnnotationSpec.builder(Composable::class).build())),
@@ -268,10 +273,10 @@ internal object UiNodeSpec {
       // Body
       .applyIf(enumParameters.isNotEmpty()) {
         enumParameters.forEach { (parameter, unspecified) ->
-          addStatement("%L\n", enumValidator(parameter, unspecified))
+          addStatement("%L\n", enumValidatorCode(parameter, unspecified))
         }
       }
-      .addStatement("val currentCompositeKeyHash = %M", currentCompositeKeyHashMn)
+      .addStatement("val applier = %M.applier as %T", currentComposerMn, ProtobufApplierCn)
       .addCode("\n")
       .addCode(composeNode(uiNode, uiScope(uiNode, fieldTag), regularParameters, uiParameters))
       .build()
@@ -286,13 +291,13 @@ internal object UiNodeSpec {
       is UiNode.Widget -> {
         requireNotNull(uiType) { "UiType must be provided for Widget nodes." }
         requireNotNull(uiType.message) { "UiType must have a 'message' for Widget nodes." }
-        uiType.message.declaredFields
+        uiNode.message.declaredFields + uiType.message.declaredFields
       }
       else -> uiNode.message.declaredFields
     }
 
     declaredFields
-      .filter { it.name !in wellKnownFieldNames }
+      .filter { it.name !in WellKnownFieldNames }
       .forEach { field ->
         val protoType = field.type!!
         val isUiField = protoType.simpleName.run { endsWith("ChildWidget") || endsWith("Component") }
@@ -305,8 +310,8 @@ internal object UiNodeSpec {
           }
             .plus(field.name.snakeToPascal())
             .plus("Scope")
+        val uiScopeCn = ClassName(SCHEMA_GENERATED_PACKAGE, uiScopeBaseName)
 
-        val uiScopeCn = ClassName(UI_GENERATED_PACKAGE, uiScopeBaseName)
         val childWidgetOrComponentNode = when {
           isUiField -> UiNode.ChildWidgetOrComponent(Schemas.message(protoType), field.tag, uiScopeCn)
           else -> null
@@ -340,15 +345,18 @@ internal object UiNodeSpec {
     regularParameters: List<ParameterSpec>,
     uiParameters: List<ParameterSpec>,
   ): CodeBlock {
-    val defaultInitArguments =
+    val knownInitArguments =
       listOf(
         "this",
         "attributes",
         "actions",
         uiScope,
-        "currentCompositeKeyHash",
+        "applier",
       )
     val composeNodeMn = MemberName("androidx.compose.runtime", "ComposeNode")
+
+    val hasContentComposable =
+      (uiNode.contentParamName != null && uiNode.contentUiScopeName != null) || uiParameters.isNotEmpty()
 
     return buildCodeBlock {
       add("%M<%T, %T>(\n", composeNodeMn, ProtobufNodeCn, ProtobufApplierCn)
@@ -358,7 +366,7 @@ internal object UiNodeSpec {
       withIndent {
         add("%T.INIT(\n", ProtobufNodeCn)
         indent()
-        defaultInitArguments.forEach { add("%L,\n", it) }
+        knownInitArguments.forEach { add("%L,\n", it) }
         unindent()
         add(")\n")
         if (regularParameters.isNotEmpty()) {
@@ -373,21 +381,24 @@ internal object UiNodeSpec {
       }
       add("},\n")
       unindent()
-      add(") {\n")
-      indent()
-      if (uiNode.contentParamName != null && uiNode.contentUiScopeName != null) {
-        addStatement("%LProvider.%L()", uiNode.contentUiScopeName, uiNode.contentParamName)
+      add(")")
+      if (hasContentComposable) {
+        add(" {\n")
+        indent()
+        if (uiNode.contentParamName != null && uiNode.contentUiScopeName != null) {
+          addStatement("%LProvider.%L()", uiNode.contentUiScopeName, uiNode.contentParamName)
+        }
+        uiParameters.forEach { parameter ->
+          addStatement("%T.%N()", parameter.uiScopeCn().provider(), parameter)
+        }
+        unindent()
+        add("}")
       }
-      uiParameters.forEach { parameter ->
-        addStatement("%T.%N()", parameter.uiScopeCn().provider(), parameter)
-      }
-      unindent()
-      add("}")
     }
   }
 
   private fun uiScope(uiNode: UiNode, tag: Int): CodeBlock =
-    CodeBlock.of("%M(%L)", UiScopeCn.member(uiNode.name), tag)
+    CodeBlock.of("%T(%L)", UiScopeCn.nestedClass(uiNode.name), tag)
 
   private fun uiScopeMarker(name: ClassName, functions: List<FunSpec>): UiScopeMarker =
     UiScopeMarker(scopeInterface(name, functions), scopeProvider(name, functions))
@@ -428,18 +439,5 @@ internal object UiNodeSpec {
       ParameterSpec.builder("actions", ActionsCn)
         .defaultValue("%T", ActionsCn)
         .build(),
-    )
-
-  private fun enumValidator(
-    argument: ParameterSpec,
-    unspecifiedValue: EnumConstant,
-  ): CodeBlock =
-    CodeBlock.of(
-      "if (%N == %T.%L)\nerror(%S)",
-      argument,
-      argument.type,
-      unspecifiedValue.name,
-      "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우\n" +
-        "Protobuf field를 optional로 만들고 null을 제공하세요. (${argument.name})",
     )
 }

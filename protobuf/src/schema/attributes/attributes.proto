@@ -24,7 +24,7 @@ message Attributes {
   }
 
   oneof type {
-    PaddingAttribute padding = 1;
+    PaddingAttribute layout_padding = 1;
     SizeAttribute size = 2;
   }
 }

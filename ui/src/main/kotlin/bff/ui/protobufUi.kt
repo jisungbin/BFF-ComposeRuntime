@@ -6,24 +6,43 @@ import androidx.compose.runtime.withRunningRecomposer
 import bff.ui.schema.ProtobufUiScope
 import bff.ui.schema.ProtobufUiScopeProvider
 import kotlin.coroutines.coroutineContext
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.withContext
+import protobuf.source.response.Response
 
-public suspend fun protobufUi(content: @Composable ProtobufUiScope.() -> Unit): String {
+public suspend fun protobufScreen(content: @Composable ProtobufUiScope.() -> Unit): Response {
   val runningJob = Job(parent = coroutineContext[Job])
-
-  val protobuf = ProtobufNode()
   var composition: Composition? = null
 
-  withContext(coroutineContext + runningJob + ImmediateMonotonicFrameClock) {
-    withRunningRecomposer { recomposer ->
-      composition = Composition(ProtobufApplier(protobuf), recomposer).apply {
-        setContent { ProtobufUiScopeProvider.content() }
-      }
+  val uiRoot = ProtobufNode.Root()
+  var uiException: Throwable? = null
+
+  fun setUiException(throwable: Throwable?) {
+    if (uiException == null && throwable != null) {
+      uiException = throwable
     }
   }
 
+  withContext(
+    (coroutineContext + runningJob + ImmediateMonotonicFrameClock)
+      .plus(CoroutineExceptionHandler { _, throwable -> setUiException(throwable) }),
+  ) {
+    withRunningRecomposer { recomposer ->
+      composition = Composition(ProtobufApplier(uiRoot), recomposer).apply {
+        val result = runCatching { setContent { ProtobufUiScopeProvider.content() } }
+        setUiException(result.exceptionOrNull())
+      }
+    }
+  }
   runningJob.cancelAndJoin()
-  return protobuf.buildModel().toString().also { composition?.dispose() }
+
+  val uiResponse = runCatching(uiRoot::response).onFailure(::setUiException).getOrNull()
+  composition?.dispose()
+
+  return when {
+    uiException != null -> Response(error = Response.Error(message = uiException.message ?: "Unknown error"))
+    else -> uiResponse!!
+  }
 }

@@ -4,13 +4,13 @@ package bff.ui.schema
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
-import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.currentComposer
+import bff.ui.Actions
+import bff.ui.Attributes
 import bff.ui.ProtobufApplier
 import bff.ui.ProtobufNode
-import bff.ui.UiScope.Screen
+import bff.ui.UiScope
 import bff.ui.UiScopeMarker
-import bff.ui.action.Actions
-import bff.ui.attribute.Attributes
 import kotlin.Unit
 
 @UiScopeMarker
@@ -37,7 +37,7 @@ internal data object ProtobufUiScopeProvider : ProtobufUiScope {
     actions: Actions,
     sections: @Composable SectionScope.() -> Unit,
   ) {
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -46,8 +46,8 @@ internal data object ProtobufUiScopeProvider : ProtobufUiScope {
           this,
           attributes,
           actions,
-          Screen(1),
-          currentCompositeKeyHash,
+          UiScope.Screen(1),
+          applier,
         )
       },
     ) {
@@ -61,7 +61,7 @@ internal data object ProtobufUiScopeProvider : ProtobufUiScope {
     actions: Actions,
     sections: @Composable SectionScope.() -> Unit,
   ) {
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -70,8 +70,8 @@ internal data object ProtobufUiScopeProvider : ProtobufUiScope {
           this,
           attributes,
           actions,
-          Screen(2),
-          currentCompositeKeyHash,
+          UiScope.Screen(2),
+          applier,
         )
       },
     ) {

@@ -4,14 +4,15 @@ package bff.ui.schema
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
-import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.currentComposer
+import bff.ui.Actions
+import bff.ui.Attributes
 import bff.ui.ProtobufApplier
 import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
-import bff.ui.UiScope.Widget
+import bff.ui.UiScope
 import bff.ui.UiScopeMarker
-import bff.ui.action.Actions
-import bff.ui.attribute.Attributes
+import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
 import protobuf.source.component.CellColor
@@ -22,7 +23,8 @@ public sealed interface WidgetScope {
   public fun SearchHospitalAWidget(
     attributes: Attributes = Attributes,
     actions: Actions = Actions,
-    aEventItems: @Composable SearchHospitalAAEventItemsScope.() -> Unit = {},
+    isSticky: Boolean,
+    aEventItem: @Composable SearchHospitalAAEventItemScope.() -> Unit = {},
     hospitalName: @Composable SearchHospitalAHospitalNameScope.() -> Unit,
     infoText: @Composable SearchHospitalAInfoTextScope.() -> Unit,
     divider: @Composable SearchHospitalADividerScope.() -> Unit,
@@ -32,6 +34,7 @@ public sealed interface WidgetScope {
   public fun CellDividerWidget(
     attributes: Attributes = Attributes,
     actions: Actions = Actions,
+    isSticky: Boolean,
     color: CellColor,
     debugName: String? = null,
     divider: @Composable CellDividerDividerScope.() -> Unit,
@@ -43,12 +46,13 @@ internal data object WidgetScopeProvider : WidgetScope {
   override fun SearchHospitalAWidget(
     attributes: Attributes,
     actions: Actions,
-    aEventItems: @Composable SearchHospitalAAEventItemsScope.() -> Unit,
+    isSticky: Boolean,
+    aEventItem: @Composable SearchHospitalAAEventItemScope.() -> Unit,
     hospitalName: @Composable SearchHospitalAHospitalNameScope.() -> Unit,
     infoText: @Composable SearchHospitalAInfoTextScope.() -> Unit,
     divider: @Composable SearchHospitalADividerScope.() -> Unit,
   ) {
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -57,15 +61,18 @@ internal data object WidgetScopeProvider : WidgetScope {
           this,
           attributes,
           actions,
-          Widget(1_000),
-          currentCompositeKeyHash,
+          UiScope.Widget(1_000),
+          applier,
         )
+        init {
+          data[ProtobufFieldTag(4)] = isSticky
+        }
       },
     ) {
       SearchHospitalAHospitalNameScopeProvider.hospitalName()
       SearchHospitalAInfoTextScopeProvider.infoText()
       SearchHospitalADividerScopeProvider.divider()
-      SearchHospitalAAEventItemsScopeProvider.aEventItems()
+      SearchHospitalAAEventItemScopeProvider.aEventItem()
     }
   }
 
@@ -73,17 +80,18 @@ internal data object WidgetScopeProvider : WidgetScope {
   override fun CellDividerWidget(
     attributes: Attributes,
     actions: Actions,
+    isSticky: Boolean,
     color: CellColor,
     debugName: String?,
     divider: @Composable CellDividerDividerScope.() -> Unit,
   ) {
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -92,10 +100,11 @@ internal data object WidgetScopeProvider : WidgetScope {
           this,
           attributes,
           actions,
-          Widget(2_000),
-          currentCompositeKeyHash,
+          UiScope.Widget(2_000),
+          applier,
         )
         init {
+          data[ProtobufFieldTag(4)] = isSticky
           data[ProtobufFieldTag(2)] = color
           if (debugName != null) data[ProtobufFieldTag(3)] = debugName
         }

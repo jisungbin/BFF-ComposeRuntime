@@ -4,14 +4,14 @@ package bff.ui.schema
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
-import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.currentComposer
+import bff.ui.Actions
+import bff.ui.Attributes
 import bff.ui.ProtobufApplier
 import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
-import bff.ui.UiScope.ChildWidgetOrComponent
+import bff.ui.UiScope
 import bff.ui.UiScopeMarker
-import bff.ui.action.Actions
-import bff.ui.attribute.Attributes
 import kotlin.String
 import kotlin.Unit
 import protobuf.source.component.CellColor
@@ -50,12 +50,12 @@ internal data object CellDividerDividerScopeProvider : CellDividerDividerScope {
     text: @Composable CellDividerDividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -64,8 +64,8 @@ internal data object CellDividerDividerScopeProvider : CellDividerDividerScope {
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(1),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(1),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -87,18 +87,18 @@ internal data object CellDividerDividerTextScopeProvider : CellDividerDividerTex
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
         """.trimMargin())
 
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        error("""
+        throw IllegalArgumentException("""
         |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
         |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
         """.trimMargin())
 
-    val currentCompositeKeyHash = currentCompositeKeyHash
+    val applier = currentComposer.applier as ProtobufApplier
 
     ComposeNode<ProtobufNode, ProtobufApplier>(
       factory = ProtobufNode.CONSTRUCTOR,
@@ -107,8 +107,8 @@ internal data object CellDividerDividerTextScopeProvider : CellDividerDividerTex
           this,
           attributes,
           actions,
-          ChildWidgetOrComponent(3),
-          currentCompositeKeyHash,
+          UiScope.ChildWidgetOrComponent(3),
+          applier,
         )
         init {
           data[ProtobufFieldTag(2)] = style
@@ -116,7 +116,6 @@ internal data object CellDividerDividerTextScopeProvider : CellDividerDividerTex
           data[ProtobufFieldTag(4)] = text
         }
       },
-    ) {
-    }
+    )
   }
 }

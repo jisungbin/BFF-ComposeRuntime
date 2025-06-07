@@ -10,6 +10,12 @@ application {
   mainClass = "bff.server.MainKt"
 }
 
+kotlin {
+  compilerOptions {
+    optIn.add("kotlin.ExperimentalStdlibApi")
+  }
+}
+
 dependencies {
   implementation(project(":ui"))
 

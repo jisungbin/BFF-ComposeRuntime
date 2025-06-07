@@ -6,6 +6,9 @@ plugins {
 
 kotlin {
   explicitApi()
+  compilerOptions {
+    optIn.add("dev.drewhamilton.poko.SkipSupport")
+  }
 }
 
 dependencies {
@@ -13,5 +16,5 @@ dependencies {
   api("com.squareup.wire:wire-runtime:5.3.1")
 
   implementation("androidx.collection:collection:1.5.0")
-  implementation("androidx.compose.runtime:runtime:1.8.2")
+  api("androidx.compose.runtime:runtime:1.8.2")
 }

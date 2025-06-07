@@ -49,10 +49,10 @@ public class SearchHospitalAWidgetContent(
   @field:WireField(
     tag = 4,
     adapter = "protobuf.source.widget.SearchHospitalAWidgetContent${'$'}AEventChildWidget#ADAPTER",
-    jsonName = "aEventItems",
+    jsonName = "aEventItem",
     schemaIndex = 3,
   )
-  public val a_event_items: AEventChildWidget? = null,
+  public val a_event_item: AEventChildWidget? = null,
   unknownFields: ByteString = ByteString.EMPTY,
 ) : Message<SearchHospitalAWidgetContent, Nothing>(ADAPTER, unknownFields) {
   @field:WireField(
@@ -87,7 +87,7 @@ public class SearchHospitalAWidgetContent(
     if (hospital_name != other.hospital_name) return false
     if (info_text != other.info_text) return false
     if (divider != other.divider) return false
-    if (a_event_items != other.a_event_items) return false
+    if (a_event_item != other.a_event_item) return false
     return true
   }
 
@@ -98,7 +98,7 @@ public class SearchHospitalAWidgetContent(
       result = result * 37 + hospital_name.hashCode()
       result = result * 37 + info_text.hashCode()
       result = result * 37 + (divider?.hashCode() ?: 0)
-      result = result * 37 + (a_event_items?.hashCode() ?: 0)
+      result = result * 37 + (a_event_item?.hashCode() ?: 0)
       super.hashCode = result
     }
     return result
@@ -109,7 +109,7 @@ public class SearchHospitalAWidgetContent(
     if (hospital_name.isNotEmpty()) result += """hospital_name=$hospital_name"""
     if (info_text.isNotEmpty()) result += """info_text=$info_text"""
     if (divider != null) result += """divider=$divider"""
-    if (a_event_items != null) result += """a_event_items=$a_event_items"""
+    if (a_event_item != null) result += """a_event_item=$a_event_item"""
     return result.joinToString(prefix = "SearchHospitalAWidgetContent{", separator = ", ", postfix = "}")
   }
 
@@ -117,9 +117,9 @@ public class SearchHospitalAWidgetContent(
     hospital_name: List<CellTextComponent> = this.hospital_name,
     info_text: List<CellTextComponent> = this.info_text,
     divider: CellDividerComponent? = this.divider,
-    a_event_items: AEventChildWidget? = this.a_event_items,
+    a_event_item: AEventChildWidget? = this.a_event_item,
     unknownFields: ByteString = this.unknownFields,
-  ): SearchHospitalAWidgetContent = SearchHospitalAWidgetContent(hospital_name, info_text, divider, a_event_items, unknownFields)
+  ): SearchHospitalAWidgetContent = SearchHospitalAWidgetContent(hospital_name, info_text, divider, a_event_item, unknownFields)
 
   public companion object {
     @JvmField
@@ -139,7 +139,7 @@ public class SearchHospitalAWidgetContent(
         if (value.divider != null) {
           size += CellDividerComponent.ADAPTER.encodedSizeWithTag(3, value.divider)
         }
-        size += AEventChildWidget.ADAPTER.encodedSizeWithTag(4, value.a_event_items)
+        size += AEventChildWidget.ADAPTER.encodedSizeWithTag(4, value.a_event_item)
         return size
       }
 
@@ -149,13 +149,13 @@ public class SearchHospitalAWidgetContent(
         if (value.divider != null) {
           CellDividerComponent.ADAPTER.encodeWithTag(writer, 3, value.divider)
         }
-        AEventChildWidget.ADAPTER.encodeWithTag(writer, 4, value.a_event_items)
+        AEventChildWidget.ADAPTER.encodeWithTag(writer, 4, value.a_event_item)
         writer.writeBytes(value.unknownFields)
       }
 
       override fun encode(writer: ReverseProtoWriter, `value`: SearchHospitalAWidgetContent) {
         writer.writeBytes(value.unknownFields)
-        AEventChildWidget.ADAPTER.encodeWithTag(writer, 4, value.a_event_items)
+        AEventChildWidget.ADAPTER.encodeWithTag(writer, 4, value.a_event_item)
         if (value.divider != null) {
           CellDividerComponent.ADAPTER.encodeWithTag(writer, 3, value.divider)
         }
@@ -167,13 +167,13 @@ public class SearchHospitalAWidgetContent(
         val hospital_name = mutableListOf<CellTextComponent>()
         val info_text = mutableListOf<CellTextComponent>()
         var divider: CellDividerComponent? = null
-        var a_event_items: AEventChildWidget? = null
+        var a_event_item: AEventChildWidget? = null
         val unknownFields = reader.forEachTag { tag ->
           when (tag) {
             1 -> hospital_name.add(CellTextComponent.ADAPTER.decode(reader))
             2 -> info_text.add(CellTextComponent.ADAPTER.decode(reader))
             3 -> divider = CellDividerComponent.ADAPTER.decode(reader)
-            4 -> a_event_items = AEventChildWidget.ADAPTER.decode(reader)
+            4 -> a_event_item = AEventChildWidget.ADAPTER.decode(reader)
             else -> reader.readUnknownField(tag)
           }
         }
@@ -181,7 +181,7 @@ public class SearchHospitalAWidgetContent(
           hospital_name = hospital_name,
           info_text = info_text,
           divider = divider,
-          a_event_items = a_event_items,
+          a_event_item = a_event_item,
           unknownFields = unknownFields
         )
       }
@@ -190,7 +190,7 @@ public class SearchHospitalAWidgetContent(
         hospital_name = value.hospital_name.redactElements(CellTextComponent.ADAPTER),
         info_text = value.info_text.redactElements(CellTextComponent.ADAPTER),
         divider = value.divider?.let(CellDividerComponent.ADAPTER::redact),
-        a_event_items = value.a_event_items?.let(AEventChildWidget.ADAPTER::redact),
+        a_event_item = value.a_event_item?.let(AEventChildWidget.ADAPTER::redact),
         unknownFields = ByteString.EMPTY
       )
     }
@@ -227,14 +227,7 @@ public class SearchHospitalAWidgetContent(
       schemaIndex = 5,
     )
     public val divider: CellDividerComponent? = null,
-    @field:WireField(
-      tag = 7,
-      adapter = "protobuf.source.widget.SearchHospitalAWidgetContent${'$'}BEventChildWidget#ADAPTER",
-      label = WireField.Label.OMIT_IDENTITY,
-      jsonName = "bEventItems",
-      schemaIndex = 6,
-    )
-    public val b_event_items: BEventChildWidget? = null,
+    b_event_items: List<BEventChildWidget> = emptyList(),
     unknownFields: ByteString = ByteString.EMPTY,
   ) : Message<AEventChildWidget, Nothing>(ADAPTER, unknownFields) {
     @field:WireField(
@@ -252,6 +245,16 @@ public class SearchHospitalAWidgetContent(
       schemaIndex = 2,
     )
     public val actions: List<Action> = immutableCopyOf("actions", actions)
+
+    @field:WireField(
+      tag = 7,
+      adapter = "protobuf.source.widget.SearchHospitalAWidgetContent${'$'}BEventChildWidget#ADAPTER",
+      label = WireField.Label.REPEATED,
+      jsonName = "bEventItems",
+      schemaIndex = 6,
+    )
+    public val b_event_items: List<BEventChildWidget> =
+        immutableCopyOf("b_event_items", b_event_items)
 
     @Deprecated(
       message = "Shouldn't be used in Kotlin",
@@ -283,7 +286,7 @@ public class SearchHospitalAWidgetContent(
         result = result * 37 + (title?.hashCode() ?: 0)
         result = result * 37 + (cost?.hashCode() ?: 0)
         result = result * 37 + (divider?.hashCode() ?: 0)
-        result = result * 37 + (b_event_items?.hashCode() ?: 0)
+        result = result * 37 + b_event_items.hashCode()
         super.hashCode = result
       }
       return result
@@ -297,7 +300,7 @@ public class SearchHospitalAWidgetContent(
       if (title != null) result += """title=$title"""
       if (cost != null) result += """cost=$cost"""
       if (divider != null) result += """divider=$divider"""
-      if (b_event_items != null) result += """b_event_items=$b_event_items"""
+      if (b_event_items.isNotEmpty()) result += """b_event_items=$b_event_items"""
       return result.joinToString(prefix = "AEventChildWidget{", separator = ", ", postfix = "}")
     }
 
@@ -308,7 +311,7 @@ public class SearchHospitalAWidgetContent(
       title: CellTextComponent? = this.title,
       cost: CellTextComponent? = this.cost,
       divider: CellDividerComponent? = this.divider,
-      b_event_items: BEventChildWidget? = this.b_event_items,
+      b_event_items: List<BEventChildWidget> = this.b_event_items,
       unknownFields: ByteString = this.unknownFields,
     ): AEventChildWidget = AEventChildWidget(id, attributes, actions, title, cost, divider, b_event_items, unknownFields)
 
@@ -335,9 +338,7 @@ public class SearchHospitalAWidgetContent(
           if (value.divider != null) {
             size += CellDividerComponent.ADAPTER.encodedSizeWithTag(6, value.divider)
           }
-          if (value.b_event_items != null) {
-            size += BEventChildWidget.ADAPTER.encodedSizeWithTag(7, value.b_event_items)
-          }
+          size += BEventChildWidget.ADAPTER.asRepeated().encodedSizeWithTag(7, value.b_event_items)
           return size
         }
 
@@ -352,17 +353,13 @@ public class SearchHospitalAWidgetContent(
           if (value.divider != null) {
             CellDividerComponent.ADAPTER.encodeWithTag(writer, 6, value.divider)
           }
-          if (value.b_event_items != null) {
-            BEventChildWidget.ADAPTER.encodeWithTag(writer, 7, value.b_event_items)
-          }
+          BEventChildWidget.ADAPTER.asRepeated().encodeWithTag(writer, 7, value.b_event_items)
           writer.writeBytes(value.unknownFields)
         }
 
         override fun encode(writer: ReverseProtoWriter, `value`: AEventChildWidget) {
           writer.writeBytes(value.unknownFields)
-          if (value.b_event_items != null) {
-            BEventChildWidget.ADAPTER.encodeWithTag(writer, 7, value.b_event_items)
-          }
+          BEventChildWidget.ADAPTER.asRepeated().encodeWithTag(writer, 7, value.b_event_items)
           if (value.divider != null) {
             CellDividerComponent.ADAPTER.encodeWithTag(writer, 6, value.divider)
           }
@@ -382,7 +379,7 @@ public class SearchHospitalAWidgetContent(
           var title: CellTextComponent? = null
           var cost: CellTextComponent? = null
           var divider: CellDividerComponent? = null
-          var b_event_items: BEventChildWidget? = null
+          val b_event_items = mutableListOf<BEventChildWidget>()
           val unknownFields = reader.forEachTag { tag ->
             when (tag) {
               1 -> id = ProtoAdapter.STRING.decode(reader)
@@ -391,7 +388,7 @@ public class SearchHospitalAWidgetContent(
               4 -> title = CellTextComponent.ADAPTER.decode(reader)
               5 -> cost = CellTextComponent.ADAPTER.decode(reader)
               6 -> divider = CellDividerComponent.ADAPTER.decode(reader)
-              7 -> b_event_items = BEventChildWidget.ADAPTER.decode(reader)
+              7 -> b_event_items.add(BEventChildWidget.ADAPTER.decode(reader))
               else -> reader.readUnknownField(tag)
             }
           }
@@ -413,7 +410,7 @@ public class SearchHospitalAWidgetContent(
           title = value.title?.let(CellTextComponent.ADAPTER::redact),
           cost = value.cost?.let(CellTextComponent.ADAPTER::redact),
           divider = value.divider?.let(CellDividerComponent.ADAPTER::redact),
-          b_event_items = value.b_event_items?.let(BEventChildWidget.ADAPTER::redact),
+          b_event_items = value.b_event_items.redactElements(BEventChildWidget.ADAPTER),
           unknownFields = ByteString.EMPTY
         )
       }

@@ -37,10 +37,11 @@ public class Attributes(
   @field:WireField(
     tag = 1,
     adapter = "protobuf.source.attributes.Attributes${'$'}PaddingAttribute#ADAPTER",
+    jsonName = "layoutPadding",
     oneofName = "type",
     schemaIndex = 0,
   )
-  public val padding: PaddingAttribute? = null,
+  public val layout_padding: PaddingAttribute? = null,
   @field:WireField(
     tag = 2,
     adapter = "protobuf.source.attributes.Attributes${'$'}SizeAttribute#ADAPTER",
@@ -51,8 +52,8 @@ public class Attributes(
   unknownFields: ByteString = ByteString.EMPTY,
 ) : Message<Attributes, Nothing>(ADAPTER, unknownFields) {
   init {
-    require(countNonNull(padding, size) <= 1) {
-      "At most one of padding, size may be non-null"
+    require(countNonNull(layout_padding, size) <= 1) {
+      "At most one of layout_padding, size may be non-null"
     }
   }
 
@@ -66,7 +67,7 @@ public class Attributes(
     if (other === this) return true
     if (other !is Attributes) return false
     if (unknownFields != other.unknownFields) return false
-    if (padding != other.padding) return false
+    if (layout_padding != other.layout_padding) return false
     if (size != other.size) return false
     return true
   }
@@ -75,7 +76,7 @@ public class Attributes(
     var result = super.hashCode
     if (result == 0) {
       result = unknownFields.hashCode()
-      result = result * 37 + (padding?.hashCode() ?: 0)
+      result = result * 37 + (layout_padding?.hashCode() ?: 0)
       result = result * 37 + (size?.hashCode() ?: 0)
       super.hashCode = result
     }
@@ -84,16 +85,16 @@ public class Attributes(
 
   override fun toString(): String {
     val result = mutableListOf<String>()
-    if (padding != null) result += """padding=$padding"""
+    if (layout_padding != null) result += """layout_padding=$layout_padding"""
     if (size != null) result += """size=$size"""
     return result.joinToString(prefix = "Attributes{", separator = ", ", postfix = "}")
   }
 
   public fun copy(
-    padding: PaddingAttribute? = this.padding,
+    layout_padding: PaddingAttribute? = this.layout_padding,
     size: SizeAttribute? = this.size,
     unknownFields: ByteString = this.unknownFields,
-  ): Attributes = Attributes(padding, size, unknownFields)
+  ): Attributes = Attributes(layout_padding, size, unknownFields)
 
   public companion object {
     @JvmField
@@ -107,13 +108,13 @@ public class Attributes(
     ) {
       override fun encodedSize(`value`: Attributes): Int {
         var size_ = value.unknownFields.size
-        size_ += PaddingAttribute.ADAPTER.encodedSizeWithTag(1, value.padding)
+        size_ += PaddingAttribute.ADAPTER.encodedSizeWithTag(1, value.layout_padding)
         size_ += SizeAttribute.ADAPTER.encodedSizeWithTag(2, value.size)
         return size_
       }
 
       override fun encode(writer: ProtoWriter, `value`: Attributes) {
-        PaddingAttribute.ADAPTER.encodeWithTag(writer, 1, value.padding)
+        PaddingAttribute.ADAPTER.encodeWithTag(writer, 1, value.layout_padding)
         SizeAttribute.ADAPTER.encodeWithTag(writer, 2, value.size)
         writer.writeBytes(value.unknownFields)
       }
@@ -121,28 +122,28 @@ public class Attributes(
       override fun encode(writer: ReverseProtoWriter, `value`: Attributes) {
         writer.writeBytes(value.unknownFields)
         SizeAttribute.ADAPTER.encodeWithTag(writer, 2, value.size)
-        PaddingAttribute.ADAPTER.encodeWithTag(writer, 1, value.padding)
+        PaddingAttribute.ADAPTER.encodeWithTag(writer, 1, value.layout_padding)
       }
 
       override fun decode(reader: ProtoReader): Attributes {
-        var padding: PaddingAttribute? = null
+        var layout_padding: PaddingAttribute? = null
         var size: SizeAttribute? = null
         val unknownFields = reader.forEachTag { tag ->
           when (tag) {
-            1 -> padding = PaddingAttribute.ADAPTER.decode(reader)
+            1 -> layout_padding = PaddingAttribute.ADAPTER.decode(reader)
             2 -> size = SizeAttribute.ADAPTER.decode(reader)
             else -> reader.readUnknownField(tag)
           }
         }
         return Attributes(
-          padding = padding,
+          layout_padding = layout_padding,
           size = size,
           unknownFields = unknownFields
         )
       }
 
       override fun redact(`value`: Attributes): Attributes = value.copy(
-        padding = value.padding?.let(PaddingAttribute.ADAPTER::redact),
+        layout_padding = value.layout_padding?.let(PaddingAttribute.ADAPTER::redact),
         size = value.size?.let(SizeAttribute.ADAPTER::redact),
         unknownFields = ByteString.EMPTY
       )
