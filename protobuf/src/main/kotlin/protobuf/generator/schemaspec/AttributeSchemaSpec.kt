@@ -16,21 +16,22 @@ import protobuf.generator.AliasMode
 import protobuf.generator.GENERATED_COMMENT
 import protobuf.generator.Names.AttributeCn
 import protobuf.generator.Names.AttributesCn
+import protobuf.generator.Names.UI_PACKAGE_NAME
 import protobuf.generator.ProtoAliasable
 import protobuf.generator.SchemaGenerator.SCHEMA_GENERATED_PACKAGE
 import protobuf.generator.addNullSafeStatement
 import protobuf.generator.applyIf
-import protobuf.generator.className
 import protobuf.generator.enumValidatorCode
 import protobuf.generator.isOptional
 import protobuf.generator.schemaspec.MessageProtoType.Companion.protoType
 import protobuf.generator.snakeToCamel
+import protobuf.generator.typeName
 
 private typealias MessageTag = Int
 
 internal object AttributeSchemaSpec : ProtoAliasable(SCHEMA_GENERATED_PACKAGE, AliasMode.TypeAlias) {
-  private val AttributeThenMn = MemberName("bff.ui", "then", isExtension = true)
-  private val MutableIntObjectMapOfMn = MemberName("androidx.collection", "mutableIntObjectMapOf")
+  private val attributeThenMn = MemberName(UI_PACKAGE_NAME, "then", isExtension = true)
+  private val mutableIntObjectMapOfMn = MemberName("androidx.collection", "mutableIntObjectMapOf")
 
   internal fun attributesFile(): FileSpec {
     val functions = Schemas.Attributes.oneOf("type")!!.fields.map(::attributeFun)
@@ -49,7 +50,7 @@ internal object AttributeSchemaSpec : ProtoAliasable(SCHEMA_GENERATED_PACKAGE, A
         .map { field ->
           ParameterSpec.builder(
             field.name.snakeToCamel(),
-            field.type!!.className().protoAliased().copy(nullable = field.isOptional),
+            field.type!!.typeName().protoAliased().copy(nullable = field.isOptional),
           )
             .applyIf(field.isOptional) { defaultValue("null") }
             .tag<MessageTag>(field.tag)
@@ -74,7 +75,7 @@ internal object AttributeSchemaSpec : ProtoAliasable(SCHEMA_GENERATED_PACKAGE, A
         }
         addCode("\n")
       }
-      .addStatement("val arguments = %M<%T>()", MutableIntObjectMapOfMn, ANY)
+      .addStatement("val arguments = %M<%T>()", mutableIntObjectMapOfMn, ANY)
       .addCode(
         buildCodeBlock {
           attributeParameters.forEach { argument ->
@@ -85,7 +86,7 @@ internal object AttributeSchemaSpec : ProtoAliasable(SCHEMA_GENERATED_PACKAGE, A
         },
       )
       .addCode("\n")
-      .addStatement("return this %M %T(%L, arguments)", AttributeThenMn, AttributeCn, attributeType.tag)
+      .addStatement("return this %M %T(%L, arguments)", attributeThenMn, AttributeCn, attributeType.tag)
       .build()
   }
 }

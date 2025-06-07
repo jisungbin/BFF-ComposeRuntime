@@ -11,12 +11,17 @@ internal object ProtobufKotlinGenerator {
   internal fun generate() {
     WireRun(
       sourcePath = listOf(PROTO_SOURCE_PATH),
-      targets = listOf(KotlinTarget(outDirectory = projectDir.resolve("protobuf/src/main/kotlin").path)),
+      targets = listOf(
+        KotlinTarget(
+          outDirectory = projectDir.resolve("protobuf/src/main/kotlin").path,
+          escapeKotlinKeywords = true,
+        )
+      ),
     )
-      .execute(FileSystem.SYSTEM, Logger())
+      .execute(FileSystem.SYSTEM, GeneratedLogger())
   }
 
-  private class Logger : WireLogger {
+  private class GeneratedLogger : WireLogger {
     override fun artifactHandled(outputPath: Path, qualifiedName: String, targetName: String) {
       val artifactName = qualifiedName.substringAfterLast('.')
       val fullOutputPath = outputPath.resolve(qualifiedName.replace('.', '/') + ".kt")

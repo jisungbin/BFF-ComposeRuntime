@@ -39,12 +39,15 @@ internal fun enumValidatorCode(
   }
 
   return buildCodeBlock {
-    add("if (%N == %T.%L)\n", argument, argument.type, unspecifiedValue.name)
+    add("if (%N == %T.%L)\n", argument, argument.type.copy(nullable = false), unspecifiedValue.name)
     indent()
     add("throw %T(\n", IllegalArgumentException::class)
     withIndent {
       add("%S +\n", "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 ")
-      withIndent { add("%S,\n", "Protobuf field를 optional로 만들고 null을 제공하세요. ($signature)") }
+      withIndent {
+        add("%S +\n", "Protobuf field를 optional로 만들고 null을 제공하세요. ")
+        add("%S,\n", "($signature)")
+      }
     }
     add(")")
     unindent()

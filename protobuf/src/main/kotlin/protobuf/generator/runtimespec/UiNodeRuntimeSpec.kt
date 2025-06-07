@@ -10,21 +10,31 @@ import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
-import com.squareup.kotlinpoet.buildCodeBlock
-import com.squareup.kotlinpoet.withIndent
 import com.squareup.wire.schema.Field
 import com.squareup.wire.schema.MessageType
 import protobuf.Schemas
 import protobuf.generator.GENERATED_COMMENT
 import protobuf.generator.Names.BffUiCodegenExceptionCn
+import protobuf.generator.Names.HELPER_PACKAGE_NAME
 import protobuf.generator.Names.ProtobufNodeCn
+import protobuf.generator.Names.UI_PACKAGE_NAME
 import protobuf.generator.Names.UiScopeCn
+import protobuf.generator.Names.checkChildrenScopeMn
+import protobuf.generator.Names.checkScopeMn
+import protobuf.generator.Names.checkTypeIfNotNullMn
+import protobuf.generator.Names.checkTypeMn
+import protobuf.generator.Names.childOfScopeMn
+import protobuf.generator.Names.childOfScopeOrNullMn
+import protobuf.generator.Names.childrenOfScopeMn
+import protobuf.generator.Names.componentBaseMn
 import protobuf.generator.RuntimeGenerator.RUNTIME_GENERATED_PACKAGE
 import protobuf.generator.UiKind
-import protobuf.generator.className
+import protobuf.generator.indent
 import protobuf.generator.isOptional
 import protobuf.generator.schemaspec.UiNodeSchemaSpec.WellKnownFieldNames
 import protobuf.generator.snakeToCamel
+import protobuf.generator.typeName
+import protobuf.generator.unindent
 import protobuf.source.response.Response
 import protobuf.source.screen.Screen
 import protobuf.source.section.Section
@@ -44,20 +54,10 @@ private enum class Origin {
 }
 
 internal object UiNodeRuntimeSpec {
-  private val ResponseTypeCn = ClassName("bff.ui", "ResponseType")
-  private val ProtoFieldMn = MemberName("bff.ui", "protoField", isExtension = true)
+  private val ResponseTypeCn = ClassName(UI_PACKAGE_NAME, "ResponseType")
+  private val ActionResolverCn = ClassName(HELPER_PACKAGE_NAME, "ActionResolver")
 
-  private object HelperMns {
-    val childOfScope = MemberName("bff.ui.helper", "childOfScope", isExtension = true)
-    val childOfScopeOrNull = MemberName("bff.ui.helper", "childOfScopeOrNull", isExtension = true)
-    val childrenOfScope = MemberName("bff.ui.helper", "childrenOfScope", isExtension = true)
-    val componentBase = MemberName("bff.ui.helper", "componentBase", isExtension = true)
-
-    val checkType = MemberName("bff.ui.helper", "checkType")
-    val checkTypeIfNotNull = MemberName("bff.ui.helper", "checkTypeIfNotNull")
-    val checkScope = MemberName("bff.ui.helper", "checkScope")
-    val checkChildrenScope = MemberName("bff.ui.helper", "checkChildrenScope")
-  }
+  private val protoFieldMn = MemberName(UI_PACKAGE_NAME, "protoField", isExtension = true)
 
   private object ResolverCns {
     val WidgetContent = ClassName(RUNTIME_GENERATED_PACKAGE, "WidgetContentResolver")
@@ -111,17 +111,17 @@ internal object UiNodeRuntimeSpec {
       .beginControlFlow("return when (root.type)")
       .apply {
         listOf("Screen", "Widget").forEach { kind ->
-          addStatement("%T -> {", ResponseTypeCn.nestedClass(kind))
-          addCode("⇥")
-          addStatement("%M<%T>(root)", HelperMns.checkChildrenScope, UiScopeCn.nestedClass(kind))
+          addCode("%T -> {\n", ResponseTypeCn.nestedClass(kind))
+          indent()
+          addStatement("%M<%T>(root)", checkChildrenScopeMn, UiScopeCn.nestedClass(kind))
           addStatement(
             "%T(%L = root.children.map(::build%L))",
             Response::class,
             kind.replaceFirstChar(Char::lowercaseChar) + 's',
             kind,
           )
-          addCode("⇤")
-          addStatement("}")
+          unindent()
+          addCode("}\n")
         }
       }
       .endControlFlow()
@@ -145,26 +145,22 @@ internal object UiNodeRuntimeSpec {
       .addModifiers(PRIVATE)
       .addParameter("node", ProtobufNodeCn)
       .returns(returns)
-      .addStatement("%M<%T>(node)", HelperMns.checkChildrenScope, UiScopeCn.nestedClass(contentTypeName))
+      .addStatement("%M<%T>(node)", checkChildrenScopeMn, UiScopeCn.nestedClass(contentTypeName))
       .addStatement("val %L = node.children.map(::%L)", contentName, contentBuilderName)
       .apply { regularFields.forEach { addStatement("%L", it.getterStatement) } }
       .addCode("\n")
-      .addStatement("val scope = %M<%T>(node)", HelperMns.checkScope, UiScopeCn.nestedClass(kind.name))
+      .addStatement("val scope = %M<%T>(node)", checkScopeMn, UiScopeCn.nestedClass(kind.name))
       .addStatement("%L", screenOrSectionTypeGetterCode(kind))
       .addCode("\n")
       .addCode("return %T(\n", returns)
-      .addCode(
-        buildCodeBlock {
-          indent()
-          addStatement("id = node.id,")
-          addStatement("attributes = %M(node.attributes),", AttributeRuntimeSpec.resolveFunctionMn)
-          addStatement("actions = %M(node.actions),", ActionRuntimeSpec.resolveFunctionMn)
-          addStatement("type = type,")
-          addStatement("%L = %L,", contentName, contentName)
-          regularFields.forEach { addStatement("%L = %L,", it.fieldName, it.getterName) }
-          unindent()
-        },
-      )
+      .indent()
+      .addStatement("id = node.id,")
+      .addStatement("attributes = AttributeResolver.resolve(node.attributes),")
+      .addStatement("actions = %T.resolve(node.actions),", ActionResolverCn)
+      .addStatement("type = type,")
+      .addStatement("%L = %L,", contentName, contentName)
+      .apply { regularFields.forEach { addStatement("%L = %L,", it.fieldName, it.getterName) } }
+      .unindent()
       .addCode(")")
       .build()
   }
@@ -178,41 +174,34 @@ internal object UiNodeRuntimeSpec {
       .addModifiers(PRIVATE)
       .addParameter("node", ProtobufNodeCn)
       .returns(Widget::class)
-      .addStatement("%M<%T>(node)", HelperMns.checkChildrenScope, UiScopeCn.nestedClass("ChildWidgetOrComponent"))
-      .addStatement("val scope = %M<%T>(node)", HelperMns.checkScope, UiScopeCn.nestedClass("Widget"))
+      .addStatement("%M<%T>(node)", checkChildrenScopeMn, UiScopeCn.nestedClass("ChildWidgetOrComponent"))
+      .addStatement("val scope = %M<%T>(node)", checkScopeMn, UiScopeCn.nestedClass("Widget"))
       .apply { regularFields.forEach { addStatement("%L", it.getterStatement) } }
       .addCode("\n")
       .beginControlFlow("return when (val contentTag = scope.contentType)")
       .apply {
         contentFields.forEach { field ->
-          val (resolver, resolverOrigin) = widgetContentOrChildWidgetOrComponentResolverFun(Schemas.message(field.type!!))
+          val (resolver, resolverOrigin) = uiFieldResolverFun("Widget", Schemas.message(field.type!!))
           if (resolverOrigin == Origin.Generated) widgetContentResolvers.add(resolver)
 
-          addCode(
-            buildCodeBlock {
-              add("%L -> %T(\n", field.tag, Widget::class)
-              withIndent {
-                addStatement("id = node.id,")
-                addStatement("attributes = %M(node.attributes),", AttributeRuntimeSpec.resolveFunctionMn)
-                addStatement("actions = %M(node.actions),", ActionRuntimeSpec.resolveFunctionMn)
-                regularFields.forEach { addStatement("%L = %L,", it.fieldName, it.getterName) }
-                addStatement("%L = %M(node),", field.name, ResolverCns.WidgetContent.member(resolver.name))
-              }
-              add(")\n")
-            },
-          )
+          addCode("%L -> %T(\n", field.tag, Widget::class)
+          indent()
+          addStatement("id = node.id,")
+          addStatement("attributes = AttributeResolver.resolve(node.attributes),")
+          addStatement("actions = %T.resolve(node.actions),", ActionResolverCn)
+          regularFields.forEach { addStatement("%L = %L,", it.fieldName, it.getterName) }
+          addStatement("%L = %M(node),", field.name, ResolverCns.WidgetContent.member(resolver.name))
+          unindent()
+          addCode(")\n")
         }
-        addStatement(
-          "else -> throw %T(%P)",
-          BffUiCodegenExceptionCn,
-          "\$contentTag is not a valid Widget's content tag.",
-        )
+        addStatement("else -> throw %T(%P)", BffUiCodegenExceptionCn, "\$contentTag is not a valid Widget's content tag.")
       }
       .endControlFlow()
       .build()
   }
 
-  private fun widgetContentOrChildWidgetOrComponentResolverFun(
+  private fun uiFieldResolverFun(
+    containerSimpleName: String,
     message: MessageType,
     allowWidgetContent: Boolean = true,
   ): Pair<FunSpec, Origin> {
@@ -226,8 +215,8 @@ internal object UiNodeRuntimeSpec {
       throw IllegalArgumentException("WidgetContent resolver is not allowed in this context.")
     }
 
-    val resolverName =
-      message.type.simpleName.removeSuffix(kindName).replaceFirstChar(Char::lowercaseChar)
+    val currentSimpleName = message.type.simpleName.run { if (kindName != this) removeSuffix(kindName) else this }
+    val resolverName = containerSimpleName.replaceFirstChar(Char::lowercaseChar) + currentSimpleName
 
     val existedResolver = when (kindName) {
       "WidgetContent" -> widgetContentResolvers
@@ -244,51 +233,49 @@ internal object UiNodeRuntimeSpec {
       FunSpec.builder(resolverName)
         .addModifiers(INTERNAL)
         .addParameter("node", ProtobufNodeCn)
-        .returns(message.type.className())
+        .returns(message.type.typeName())
         .apply { (regularFields + uiFields).forEach { addStatement("%L", it.getterStatement) } }
         .addCode("\n")
-        .addCode("return %T(\n", message.type.className())
-        .addCode(
-          buildCodeBlock {
-            indent()
-            when (kindName) {
-              "ChildWidget" -> {
-                addStatement("id = node.id,")
-                addStatement("attributes = %M(node.attributes),", AttributeRuntimeSpec.resolveFunctionMn)
-                addStatement("actions = %M(node.actions),", ActionRuntimeSpec.resolveFunctionMn)
-              }
-              "Component" -> addStatement("base = node.%M(),", HelperMns.componentBase)
+        .addCode("return %T(\n", message.type.typeName())
+        .indent()
+        .apply {
+          when (kindName) {
+            "ChildWidget" -> {
+              addStatement("id = node.id,")
+              addStatement("attributes = AttributeResolver.resolve(node.attributes),")
+              addStatement("actions = %T.resolve(node.actions),", ActionResolverCn)
             }
-            regularFields.forEach { addStatement("%L = %L,", it.fieldName, it.getterName) }
-            uiFields.forEach { uiField ->
-              val field = uiField.field
-              val fieldType = field.type!!
-              val isChildWidget = fieldType.simpleName.endsWith("ChildWidget")
+            "Component" -> addStatement("base = node.%M(),", componentBaseMn)
+          }
+          regularFields.forEach { addStatement("%L = %L,", it.fieldName, it.getterName) }
+          uiFields.forEach { uiField ->
+            val field = uiField.field
+            val fieldType = field.type!!
+            val isChildWidget = fieldType.simpleName.endsWith("ChildWidget")
 
-              val (resolver, resolverOrigin) =
-                widgetContentOrChildWidgetOrComponentResolverFun(Schemas.message(fieldType), allowWidgetContent = false)
-              if (resolverOrigin == Origin.Generated) {
-                if (isChildWidget) childWidgetResolvers.add(resolver) else componentResolvers.add(resolver)
-              }
-
-              val resolverContainerName = when {
-                isChildWidget -> ResolverCns.ChildWidget.simpleName
-                else -> ResolverCns.Component.simpleName
-              }
-
-              addStatement(
-                "%L = %L,",
-                field.name,
-                when {
-                  field.isRepeated -> "${uiField.getterName}.map(${resolverContainerName}::${resolver.name})"
-                  field.isOptional -> "${uiField.getterName}?.let($resolverContainerName::${resolver.name})"
-                  else -> "$resolverContainerName.${resolver.name}(${uiField.getterName})" // required field
-                },
-              )
+            val (resolver, resolverOrigin) =
+              uiFieldResolverFun(currentSimpleName, Schemas.message(fieldType), allowWidgetContent = false)
+            if (resolverOrigin == Origin.Generated) {
+              if (isChildWidget) childWidgetResolvers.add(resolver) else componentResolvers.add(resolver)
             }
-            unindent()
-          },
-        )
+
+            val resolverContainerName = when {
+              isChildWidget -> ResolverCns.ChildWidget.simpleName
+              else -> ResolverCns.Component.simpleName
+            }
+
+            addStatement(
+              "%L = %L,",
+              field.name,
+              when {
+                field.isRepeated -> "${uiField.getterName}.map(${resolverContainerName}::${resolver.name})"
+                field.isOptional -> "${uiField.getterName}?.let($resolverContainerName::${resolver.name})"
+                else -> "$resolverContainerName.${resolver.name}(${uiField.getterName})" // required field
+              },
+            )
+          }
+        }
+        .unindent()
         .addCode(")")
         .build()
     return generated to Origin.Generated
@@ -314,9 +301,9 @@ internal object UiNodeRuntimeSpec {
       CodeBlock.of(
         "val %L = %M<%T>(node.%M(%L, require = %L))",
         field.name.snakeToCamel(),
-        if (field.isOptional) HelperMns.checkTypeIfNotNull else HelperMns.checkType,
-        field.type!!.className(),
-        ProtoFieldMn,
+        if (field.isOptional) checkTypeIfNotNullMn else checkTypeMn,
+        field.type!!.typeName(),
+        protoFieldMn,
         field.tag,
         !field.isOptional,
       )
@@ -334,9 +321,9 @@ internal object UiNodeRuntimeSpec {
         "val %L = node.%M(%T(%L))",
         field.name.snakeToCamel(),
         when {
-          field.isRepeated -> HelperMns.childrenOfScope
-          field.isOptional -> HelperMns.childOfScopeOrNull
-          else -> HelperMns.childOfScope // required field
+          field.isRepeated -> childrenOfScopeMn
+          field.isOptional -> childOfScopeOrNullMn
+          else -> childOfScopeMn // required field
         },
         UiScopeCn.nestedClass("ChildWidgetOrComponent"),
         field.tag,

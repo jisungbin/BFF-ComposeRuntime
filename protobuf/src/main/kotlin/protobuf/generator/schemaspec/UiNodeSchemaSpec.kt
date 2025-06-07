@@ -34,7 +34,6 @@ import protobuf.generator.Names.UiScopeMarkerCn
 import protobuf.generator.SchemaGenerator.SCHEMA_GENERATED_PACKAGE
 import protobuf.generator.addNullSafeStatement
 import protobuf.generator.applyIf
-import protobuf.generator.className
 import protobuf.generator.enumValidatorCode
 import protobuf.generator.isOptional
 import protobuf.generator.schemaspec.MessageProtoTag.Companion.protoTag
@@ -42,6 +41,7 @@ import protobuf.generator.schemaspec.MessageProtoType.Companion.protoType
 import protobuf.generator.schemaspec.UiScopeMarker.Companion.provider
 import protobuf.generator.snakeToCamel
 import protobuf.generator.snakeToPascal
+import protobuf.generator.typeName
 import protobuf.source.screen.Screen
 import protobuf.source.section.Section
 import protobuf.source.widget.Widget
@@ -326,7 +326,7 @@ internal object UiNodeSchemaSpec {
                 LambdaTypeName.get(receiver = uiScopeCn, returnType = UNIT)
                   .copy(annotations = listOf(AnnotationSpec.builder(Composable::class).build()))
               }
-              else -> field.type!!.className().copy(nullable = field.isOptional)
+              else -> field.type!!.typeName().copy(nullable = field.isOptional)
             },
           )
             .applyIf(field.isOptional) { defaultValue(if (isUiField) "{}" else "null") }

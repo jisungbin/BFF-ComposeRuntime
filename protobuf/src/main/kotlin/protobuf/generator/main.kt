@@ -25,7 +25,6 @@ internal fun main() {
   println()
   println("----- RuntimeGenerator -----")
   RuntimeGenerator.generateAttributeResolver()
-  RuntimeGenerator.generateActionResolver()
   RuntimeGenerator.generateModelBuilder()
 }
 

@@ -4,6 +4,8 @@ package bff.ui.runtime
 
 import androidx.collection.IntObjectMap
 import bff.ui.BffUiCodegenException
+import bff.ui.helper.checkType
+import bff.ui.helper.checkTypeIfNotNull
 import bff.ui.Attributes as UiAttributes
 import protobuf.source.attributes.Attributes as ProtoAttributes
 import protobuf.source.attributes.Attributes.PaddingAttribute as ProtoPaddingAttribute
@@ -24,26 +26,16 @@ internal object AttributeResolver {
   }
 
   private fun layoutPadding(arguments: IntObjectMap<Any>): ProtoPaddingAttribute = ProtoPaddingAttribute(
-    top = arguments[1] as? Float,
-    leading = arguments[2] as? Float,
-    bottom = arguments[3] as? Float,
-    trailing = arguments[4] as? Float,
+    top = checkTypeIfNotNull<Float>(arguments[1]),
+    leading = checkTypeIfNotNull<Float>(arguments[2]),
+    bottom = checkTypeIfNotNull<Float>(arguments[3]),
+    trailing = checkTypeIfNotNull<Float>(arguments[4]),
   )
 
   private fun size(arguments: IntObjectMap<Any>): ProtoSizeAttribute = ProtoSizeAttribute(
-    area = arguments[1] as? ProtoAttributes.SizeArea ?: throw BffUiCodegenException(
-      """
-        |Expected type is protobuf.source.attributes.Attributes.SizeArea, but was 
-        |${arguments[1]?.javaClass?.canonicalName}.
-        """.trimMargin()
-    ),
-    min_value = arguments[2] as? Float,
-    default_value = arguments[3] as? Float ?: throw BffUiCodegenException(
-      """
-        |Expected type is kotlin.Float, but was 
-        |${arguments[3]?.javaClass?.canonicalName}.
-        """.trimMargin()
-    ),
-    max_value = arguments[4] as? Float,
+    area = checkType<ProtoAttributes.SizeArea>(arguments[1]),
+    min_value = checkTypeIfNotNull<Float>(arguments[2]),
+    default_value = checkType<Float>(arguments[3]),
+    max_value = checkTypeIfNotNull<Float>(arguments[4]),
   )
 }

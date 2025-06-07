@@ -6,19 +6,18 @@ import bff.ui.BffUiCodegenException
 import bff.ui.ProtobufNode
 import bff.ui.ResponseType
 import bff.ui.UiScope
+import bff.ui.helper.ActionResolver
 import bff.ui.helper.checkChildrenScope
 import bff.ui.helper.checkScope
 import bff.ui.helper.checkType
 import bff.ui.helper.checkTypeIfNotNull
 import bff.ui.protoField
-import bff.ui.runtime.WidgetContentResolver.cellDivider
-import bff.ui.runtime.WidgetContentResolver.searchHospitalA
+import bff.ui.runtime.WidgetContentResolver.widgetCellDivider
+import bff.ui.runtime.WidgetContentResolver.widgetSearchHospitalA
 import protobuf.source.response.Response
 import protobuf.source.screen.Screen
 import protobuf.source.section.Section
 import protobuf.source.widget.Widget
-import bff.ui.runtime.ActionResolver.resolve as actionResolverResolve
-import bff.ui.runtime.AttributeResolver.resolve as attributeResolverResolve
 
 internal object ModelBuilder {
   internal fun response(root: ProtobufNode.Root): Response = when (root.type) {
@@ -42,8 +41,8 @@ internal object ModelBuilder {
 
     return Screen(
       id = node.id,
-      attributes = attributeResolverResolve(node.attributes),
-      actions = actionResolverResolve(node.actions),
+      attributes = AttributeResolver.resolve(node.attributes),
+      actions = ActionResolver.resolve(node.actions),
       type = type,
       sections = sections,
     )
@@ -61,8 +60,8 @@ internal object ModelBuilder {
 
     return Section(
       id = node.id,
-      attributes = attributeResolverResolve(node.attributes),
-      actions = actionResolverResolve(node.actions),
+      attributes = AttributeResolver.resolve(node.attributes),
+      actions = ActionResolver.resolve(node.actions),
       type = type,
       widgets = widgets,
       stack_direction = stackDirection,
@@ -78,17 +77,17 @@ internal object ModelBuilder {
     return when (val contentTag = scope.contentType) {
       1_000 -> Widget(
         id = node.id,
-        attributes = attributeResolverResolve(node.attributes),
-        actions = actionResolverResolve(node.actions),
+        attributes = AttributeResolver.resolve(node.attributes),
+        actions = ActionResolver.resolve(node.actions),
         is_sticky = isSticky,
-        search_hospital_a = searchHospitalA(node),
+        search_hospital_a = widgetSearchHospitalA(node),
       )
       2_000 -> Widget(
         id = node.id,
-        attributes = attributeResolverResolve(node.attributes),
-        actions = actionResolverResolve(node.actions),
+        attributes = AttributeResolver.resolve(node.attributes),
+        actions = ActionResolver.resolve(node.actions),
         is_sticky = isSticky,
-        cell_divider = cellDivider(node),
+        cell_divider = widgetCellDivider(node),
       )
       else -> throw BffUiCodegenException("""$contentTag is not a valid Widget's content tag.""")
     }

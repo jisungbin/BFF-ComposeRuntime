@@ -14,7 +14,7 @@ import protobuf.source.component.CellTextComponent
 import protobuf.source.component.CellTextStyle
 
 internal object ComponentResolver {
-  internal fun cellText(node: ProtobufNode): CellTextComponent {
+  internal fun searchHospitalACellText(node: ProtobufNode): CellTextComponent {
     val style = checkType<CellTextStyle>(node.protoField(2, require = true))
     val color = checkType<CellColor>(node.protoField(3, require = true))
     val text = checkType<String>(node.protoField(4, require = true))
@@ -27,14 +27,86 @@ internal object ComponentResolver {
     )
   }
 
-  internal fun cellDivider(node: ProtobufNode): CellDividerComponent {
+  internal fun cellDividerCellText(node: ProtobufNode): CellTextComponent {
+    val style = checkType<CellTextStyle>(node.protoField(2, require = true))
+    val color = checkType<CellColor>(node.protoField(3, require = true))
+    val text = checkType<String>(node.protoField(4, require = true))
+
+    return CellTextComponent(
+      base = node.componentBase(),
+      style = style,
+      color = color,
+      text = text,
+    )
+  }
+
+  internal fun searchHospitalACellDivider(node: ProtobufNode): CellDividerComponent {
     val style = checkType<CellDividerComponent.Style>(node.protoField(2, require = true))
     val text = node.childOfScope(UiScope.ChildWidgetOrComponent(3))
 
     return CellDividerComponent(
       base = node.componentBase(),
       style = style,
-      text = ComponentResolver.cellText(text),
+      text = ComponentResolver.cellDividerCellText(text),
+    )
+  }
+
+  internal fun aEventCellText(node: ProtobufNode): CellTextComponent {
+    val style = checkType<CellTextStyle>(node.protoField(2, require = true))
+    val color = checkType<CellColor>(node.protoField(3, require = true))
+    val text = checkType<String>(node.protoField(4, require = true))
+
+    return CellTextComponent(
+      base = node.componentBase(),
+      style = style,
+      color = color,
+      text = text,
+    )
+  }
+
+  internal fun aEventCellDivider(node: ProtobufNode): CellDividerComponent {
+    val style = checkType<CellDividerComponent.Style>(node.protoField(2, require = true))
+    val text = node.childOfScope(UiScope.ChildWidgetOrComponent(3))
+
+    return CellDividerComponent(
+      base = node.componentBase(),
+      style = style,
+      text = ComponentResolver.cellDividerCellText(text),
+    )
+  }
+
+  internal fun bEventCellText(node: ProtobufNode): CellTextComponent {
+    val style = checkType<CellTextStyle>(node.protoField(2, require = true))
+    val color = checkType<CellColor>(node.protoField(3, require = true))
+    val text = checkType<String>(node.protoField(4, require = true))
+
+    return CellTextComponent(
+      base = node.componentBase(),
+      style = style,
+      color = color,
+      text = text,
+    )
+  }
+
+  internal fun bEventCellDivider(node: ProtobufNode): CellDividerComponent {
+    val style = checkType<CellDividerComponent.Style>(node.protoField(2, require = true))
+    val text = node.childOfScope(UiScope.ChildWidgetOrComponent(3))
+
+    return CellDividerComponent(
+      base = node.componentBase(),
+      style = style,
+      text = ComponentResolver.cellDividerCellText(text),
+    )
+  }
+
+  internal fun cellDividerCellDivider(node: ProtobufNode): CellDividerComponent {
+    val style = checkType<CellDividerComponent.Style>(node.protoField(2, require = true))
+    val text = node.childOfScope(UiScope.ChildWidgetOrComponent(3))
+
+    return CellDividerComponent(
+      base = node.componentBase(),
+      style = style,
+      text = ComponentResolver.cellDividerCellText(text),
     )
   }
 }

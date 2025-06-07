@@ -1,6 +1,5 @@
 package protobuf.generator
 
-import protobuf.generator.runtimespec.ActionRuntimeSpec
 import protobuf.generator.runtimespec.AttributeRuntimeSpec
 import protobuf.generator.runtimespec.UiNodeRuntimeSpec
 
@@ -9,11 +8,6 @@ internal object RuntimeGenerator {
 
   internal fun generateAttributeResolver() {
     val generated = AttributeRuntimeSpec.resolverFile().writeTo(generatedDir)
-    println("Generated ${generated.nameWithoutExtension} in ${generated.path}")
-  }
-
-  internal fun generateActionResolver() {
-    val generated = ActionRuntimeSpec.resolveFile().writeTo(generatedDir)
     println("Generated ${generated.nameWithoutExtension} in ${generated.path}")
   }
 

@@ -15,21 +15,21 @@ import protobuf.source.widget.CellDividerWidgetContent
 import protobuf.source.widget.SearchHospitalAWidgetContent
 
 internal object WidgetContentResolver {
-  internal fun searchHospitalA(node: ProtobufNode): SearchHospitalAWidgetContent {
+  internal fun widgetSearchHospitalA(node: ProtobufNode): SearchHospitalAWidgetContent {
     val hospitalName = node.childrenOfScope(UiScope.ChildWidgetOrComponent(1))
     val infoText = node.childrenOfScope(UiScope.ChildWidgetOrComponent(2))
     val divider = node.childOfScope(UiScope.ChildWidgetOrComponent(3))
     val aEventItem = node.childOfScopeOrNull(UiScope.ChildWidgetOrComponent(4))
 
     return SearchHospitalAWidgetContent(
-      hospital_name = hospitalName.map(ComponentResolver::cellText),
-      info_text = infoText.map(ComponentResolver::cellText),
-      divider = ComponentResolver.cellDivider(divider),
-      a_event_item = aEventItem?.let(ChildWidgetResolver::aEvent),
+      hospital_name = hospitalName.map(ComponentResolver::searchHospitalACellText),
+      info_text = infoText.map(ComponentResolver::searchHospitalACellText),
+      divider = ComponentResolver.searchHospitalACellDivider(divider),
+      a_event_item = aEventItem?.let(ChildWidgetResolver::searchHospitalAAEvent),
     )
   }
 
-  internal fun cellDivider(node: ProtobufNode): CellDividerWidgetContent {
+  internal fun widgetCellDivider(node: ProtobufNode): CellDividerWidgetContent {
     val color = checkType<CellColor>(node.protoField(2, require = true))
     val debugName = checkTypeIfNotNull<String>(node.protoField(3, require = false))
     val divider = node.childOfScope(UiScope.ChildWidgetOrComponent(1))
@@ -37,7 +37,7 @@ internal object WidgetContentResolver {
     return CellDividerWidgetContent(
       color = color,
       debug_name = debugName,
-      divider = ComponentResolver.cellDivider(divider),
+      divider = ComponentResolver.cellDividerCellDivider(divider),
     )
   }
 }

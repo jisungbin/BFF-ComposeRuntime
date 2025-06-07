@@ -4,7 +4,6 @@ import bff.ui.BffUiCodegenException
 import bff.ui.ProtobufNode
 import bff.ui.UiScope
 import bff.ui.idString
-import bff.ui.runtime.ActionResolver
 import bff.ui.runtime.AttributeResolver
 import protobuf.source.component.ComponentBase
 

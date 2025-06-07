@@ -4,7 +4,6 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeAliasSpec
 import com.squareup.kotlinpoet.TypeName
-import protobuf.source.attributes.Attributes
 
 internal enum class AliasMode {
   Import, TypeAlias,
@@ -17,19 +16,20 @@ internal abstract class ProtoAliasable(
   private val aliasedImports = mutableMapOf<ClassName, String>()
   private var usesProtoAttributes = false
 
-  fun ClassName.protoAliased(): TypeName {
-    if (!packageName.startsWith("protobuf.source")) return this
+  fun TypeName.protoAliased(): TypeName {
+    val className = className() ?: return this
+    if (!className.packageName.startsWith("protobuf.source")) return this
 
     val aliased = run {
-      if (mode == AliasMode.TypeAlias && canonicalName.startsWith(protoAttributesFqn)) {
+      if (mode == AliasMode.TypeAlias && className.canonicalName.startsWith(protoAttributesFqn)) {
         usesProtoAttributes = true
-        ClassName.bestGuess(canonicalName.replace(protoAttributesFqn, "$myPackageName.ProtoAttributes"))
+        ClassName.bestGuess(className.canonicalName.replace(protoAttributesFqn, "$myPackageName.ProtoAttributes"))
       } else {
-        this
+        className
       }
     }
 
-    val newSimpleName = "Proto${simpleName}"
+    val newSimpleName = "Proto${className.simpleName}"
     aliasedImports[aliased] = newSimpleName
 
     return when (mode) {
@@ -53,9 +53,9 @@ internal abstract class ProtoAliasable(
   }
 
   internal companion object {
-    private val protoAttributesFqn = Attributes::class.qualifiedName!!
+    private val protoAttributesFqn = ProtoAttributes::class.qualifiedName!!
 
     internal fun FileSpec.Builder.applyProtoAttributesAlias(): FileSpec.Builder =
-      addAliasedImport(Attributes::class, "ProtoAttributes")
+      addAliasedImport(ProtoAttributes::class, "ProtoAttributes")
   }
 }
