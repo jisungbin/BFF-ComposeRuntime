@@ -12,6 +12,7 @@ import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScope
 import bff.ui.UiScopeMarker
+import java.lang.IllegalArgumentException
 import kotlin.String
 import kotlin.Unit
 import protobuf.source.component.CellColor
@@ -226,16 +227,15 @@ internal data object SearchHospitalAHospitalNameScopeProvider : SearchHospitalAH
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -269,16 +269,15 @@ internal data object SearchHospitalAInfoTextScopeProvider : SearchHospitalAInfoT
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -311,10 +310,10 @@ internal data object SearchHospitalADividerScopeProvider : SearchHospitalADivide
     text: @Composable SearchHospitalADividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellDividerComponent(...) 함수의 style 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -348,16 +347,15 @@ internal data object SearchHospitalAAEventItemTitleScopeProvider : SearchHospita
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -391,16 +389,15 @@ internal data object SearchHospitalAAEventItemCostScopeProvider : SearchHospital
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -433,10 +430,10 @@ internal data object SearchHospitalAAEventItemDividerScopeProvider : SearchHospi
     text: @Composable SearchHospitalAAEventItemDividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellDividerComponent(...) 함수의 style 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -500,16 +497,15 @@ internal data object SearchHospitalADividerTextScopeProvider : SearchHospitalADi
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -543,16 +539,15 @@ internal data object SearchHospitalAAEventItemDividerTextScopeProvider : SearchH
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -586,16 +581,15 @@ internal data object SearchHospitalAAEventItemBEventItemsTitleScopeProvider : Se
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -629,16 +623,15 @@ internal data object SearchHospitalAAEventItemBEventItemsCostScopeProvider : Sea
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -671,10 +664,10 @@ internal data object SearchHospitalAAEventItemBEventItemsDividerScopeProvider : 
     text: @Composable SearchHospitalAAEventItemBEventItemsDividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellDividerComponent(...) 함수의 style 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -708,16 +701,15 @@ internal data object SearchHospitalAAEventItemBEventItemsDividerTextScopeProvide
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 

@@ -31,7 +31,7 @@ import kotlin.String
 import kotlin.Suppress
 import okio.ByteString
 
-public class  CellDividerComponent(
+public class CellDividerComponent(
   @field:WireField(
     tag = 1,
     adapter = "protobuf.source.component.ComponentBase#ADAPTER",

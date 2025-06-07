@@ -12,6 +12,7 @@ import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScope
 import bff.ui.UiScopeMarker
+import java.lang.IllegalArgumentException
 import kotlin.String
 import kotlin.Unit
 import protobuf.source.component.CellColor
@@ -50,10 +51,10 @@ internal data object CellDividerDividerScopeProvider : CellDividerDividerScope {
     text: @Composable CellDividerDividerTextScope.() -> Unit,
   ) {
     if (style == CellDividerComponent.Style.STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellDividerComponent(...) 함수의 style 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 
@@ -87,16 +88,15 @@ internal data object CellDividerDividerTextScopeProvider : CellDividerDividerTex
     text: String,
   ) {
     if (style == CellTextStyle.CELL_TEXT_STYLE_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (style)
-        """.trimMargin())
-
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 style 인자)",
+      )
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellTextComponent(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 

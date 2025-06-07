@@ -68,9 +68,11 @@ internal object AttributeSchemaSpec : ProtoAliasable(SCHEMA_GENERATED_PACKAGE, A
       .returns(AttributesCn)
       .addParameters(attributeParameters)
       .applyIf(enumParameters.isNotEmpty()) {
+        val tempFun = build()
         enumParameters.forEach { (parameter, unspecified) ->
-          addStatement("%L\n", enumValidatorCode(parameter, unspecified))
+          addCode("%L\n", enumValidatorCode(tempFun, parameter, unspecified))
         }
+        addCode("\n")
       }
       .addStatement("val arguments = %M<%T>()", MutableIntObjectMapOfMn, ANY)
       .addCode(

@@ -6,6 +6,7 @@ import androidx.collection.mutableIntObjectMapOf
 import bff.ui.Attribute
 import bff.ui.Attributes
 import bff.ui.then
+import java.lang.IllegalArgumentException
 import kotlin.Any
 import kotlin.Float
 import protobuf.source.attributes.Attributes as ProtoAttributes
@@ -34,10 +35,10 @@ public fun Attributes.size(
   maxValue: Float? = null,
 ): Attributes {
   if (area == ProtoSizeArea.SIZE_AREA_UNSPECIFIED)
-      throw IllegalArgumentException("""
-      |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-      |Protobuf field를 optional로 만들고 null을 제공하세요. (area)
-      """.trimMargin())
+    throw IllegalArgumentException(
+      "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+        "Protobuf field를 optional로 만들고 null을 제공하세요. (Attributes.size(...) 함수의 area 인자)",
+    )
 
   val arguments = mutableIntObjectMapOf<Any>()
   arguments[1] = area

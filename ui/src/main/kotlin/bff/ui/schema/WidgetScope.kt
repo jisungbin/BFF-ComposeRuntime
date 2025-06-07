@@ -12,6 +12,7 @@ import bff.ui.ProtobufFieldTag
 import bff.ui.ProtobufNode
 import bff.ui.UiScope
 import bff.ui.UiScopeMarker
+import java.lang.IllegalArgumentException
 import kotlin.Boolean
 import kotlin.String
 import kotlin.Unit
@@ -86,10 +87,10 @@ internal data object WidgetScopeProvider : WidgetScope {
     divider: @Composable CellDividerDividerScope.() -> Unit,
   ) {
     if (color == CellColor.CELL_COLOR_UNSPECIFIED)
-        throw IllegalArgumentException("""
-        |BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우
-        |Protobuf field를 optional로 만들고 null을 제공하세요. (color)
-        """.trimMargin())
+      throw IllegalArgumentException(
+        "BFF UI에서 UNSPECIFIED 값의 직접 사용은 금지됩니다. 만약 지정할 값이 없는 경우 " +
+          "Protobuf field를 optional로 만들고 null을 제공하세요. (CellDividerWidget(...) 함수의 color 인자)",
+      )
 
     val applier = currentComposer.applier as ProtobufApplier
 

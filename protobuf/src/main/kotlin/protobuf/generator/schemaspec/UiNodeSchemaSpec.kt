@@ -272,9 +272,11 @@ internal object UiNodeSchemaSpec {
       }
       // Body
       .applyIf(enumParameters.isNotEmpty()) {
+        val tempFun = build()
         enumParameters.forEach { (parameter, unspecified) ->
-          addStatement("%L\n", enumValidatorCode(parameter, unspecified))
+          addCode("%L\n", enumValidatorCode(tempFun, parameter, unspecified))
         }
+        addCode("\n")
       }
       .addStatement("val applier = %M.applier as %T", currentComposerMn, ProtobufApplierCn)
       .addCode("\n")
