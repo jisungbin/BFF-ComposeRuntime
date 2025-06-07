@@ -143,8 +143,8 @@ internal object UiNodeSchemaSpec {
     val widgetUiFunctions = widgetUiTypes.map { uiFunction(widgetUiNode, it) }
 
 
-    val protobufUiScope =
-      uiScopeMarker(ClassName(SCHEMA_GENERATED_PACKAGE, "ProtobufUiScope"), screenUiFunctions)
+    val screenScope =
+      uiScopeMarker(ClassName(SCHEMA_GENERATED_PACKAGE, "ScreenScope"), screenUiFunctions)
 
     val screenContentUiScopeCn =
       screenUiFunctions.first()
@@ -185,8 +185,8 @@ internal object UiNodeSchemaSpec {
     val screenFile =
       FileSpec.builder(SCHEMA_GENERATED_PACKAGE, "ScreenUis")
         .addFileComment(GENERATED_COMMENT)
-        .addType(protobufUiScope.scopeInterface)
-        .addType(protobufUiScope.scopeProvider)
+        .addType(screenScope.scopeInterface)
+        .addType(screenScope.scopeProvider)
         .build()
 
     val sectionFile =

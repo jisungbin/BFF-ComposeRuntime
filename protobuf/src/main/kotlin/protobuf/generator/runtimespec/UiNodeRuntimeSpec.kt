@@ -44,7 +44,8 @@ private enum class Origin {
 }
 
 internal object UiNodeRuntimeSpec {
-  private val protoFieldMn = MemberName("bff.ui", "protoField", isExtension = true)
+  private val ResponseTypeCn = ClassName("bff.ui", "ResponseType")
+  private val ProtoFieldMn = MemberName("bff.ui", "protoField", isExtension = true)
 
   private object HelperMns {
     val childOfScope = MemberName("bff.ui.helper", "childOfScope", isExtension = true)
@@ -74,7 +75,7 @@ internal object UiNodeRuntimeSpec {
     val modelBuilder =
       TypeSpec.objectBuilder("ModelBuilder")
         .addModifiers(INTERNAL)
-        .addFunction(buildResponseFun())
+        .addFunction(responseFun())
         .addFunction(buildScreenOrSectionFun(UiKind.Screen))
         .addFunction(buildScreenOrSectionFun(UiKind.Section))
         .addFunction(buildWidgetFun())
@@ -102,15 +103,28 @@ internal object UiNodeRuntimeSpec {
     return listOf(modelBuilderFile, *resolverFiles.toTypedArray())
   }
 
-  private fun buildResponseFun(): FunSpec =
-    FunSpec.builder("buildResponse")
+  private fun responseFun(): FunSpec =
+    FunSpec.builder("response")
       .addModifiers(INTERNAL)
       .addParameter("root", ProtobufNodeCn.nestedClass("Root"))
       .returns(Response::class)
-      .addStatement("%M<%T>(root)", HelperMns.checkChildrenScope, UiScopeCn.nestedClass("Screen"))
-      .addStatement("val screens = root.children.map(::buildScreen)")
-      .addCode("\n")
-      .addStatement("return %T(screens = screens)", Response::class)
+      .beginControlFlow("return when (root.type)")
+      .apply {
+        listOf("Screen", "Widget").forEach { kind ->
+          addStatement("%T -> {", ResponseTypeCn.nestedClass(kind))
+          addCode("⇥")
+          addStatement("%M<%T>(root)", HelperMns.checkChildrenScope, UiScopeCn.nestedClass(kind))
+          addStatement(
+            "%T(%L = root.children.map(::build%L))",
+            Response::class,
+            kind.replaceFirstChar(Char::lowercaseChar) + 's',
+            kind,
+          )
+          addCode("⇤")
+          addStatement("}")
+        }
+      }
+      .endControlFlow()
       .build()
 
   private fun buildScreenOrSectionFun(kind: UiKind): FunSpec {
@@ -302,7 +316,7 @@ internal object UiNodeRuntimeSpec {
         field.name.snakeToCamel(),
         if (field.isOptional) HelperMns.checkTypeIfNotNull else HelperMns.checkType,
         field.type!!.className(),
-        protoFieldMn,
+        ProtoFieldMn,
         field.tag,
         !field.isOptional,
       )

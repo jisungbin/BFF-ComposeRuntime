@@ -14,7 +14,7 @@ import bff.ui.UiScopeMarker
 import kotlin.Unit
 
 @UiScopeMarker
-public sealed interface ProtobufUiScope {
+public sealed interface ScreenScope {
   @Composable
   public fun RootScreen(
     attributes: Attributes = Attributes,
@@ -30,7 +30,7 @@ public sealed interface ProtobufUiScope {
   )
 }
 
-internal data object ProtobufUiScopeProvider : ProtobufUiScope {
+internal data object ScreenScopeProvider : ScreenScope {
   @Composable
   override fun RootScreen(
     attributes: Attributes,

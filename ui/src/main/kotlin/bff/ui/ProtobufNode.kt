@@ -29,7 +29,7 @@ internal open class ProtobufNode private constructor() {
   override fun toString(): String =
     if (::scope.isInitialized) "${scope.idString()}@${hashCode().toString(16)}" else super.toString()
 
-  internal class Root : ProtobufNode() {
+  internal class Root(internal val type: ResponseType) : ProtobufNode() {
     init {
       id = "root"
       attributes = Attributes
@@ -37,7 +37,7 @@ internal open class ProtobufNode private constructor() {
       scope = UiScope.Root
     }
 
-    internal fun response(): Response = ModelBuilder.buildResponse(this)
+    internal fun response(): Response = ModelBuilder.response(this)
 
     internal fun clear() {
       _children.clear()

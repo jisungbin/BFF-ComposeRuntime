@@ -4,6 +4,7 @@ package bff.ui.runtime
 
 import bff.ui.BffUiCodegenException
 import bff.ui.ProtobufNode
+import bff.ui.ResponseType
 import bff.ui.UiScope
 import bff.ui.helper.checkChildrenScope
 import bff.ui.helper.checkScope
@@ -22,11 +23,15 @@ import bff.ui.runtime.ActionResolver.resolve as actionResolverResolve
 import bff.ui.runtime.AttributeResolver.resolve as attributeResolverResolve
 
 internal object ModelBuilder {
-  internal fun buildResponse(root: ProtobufNode.Root): Response {
-    checkChildrenScope<UiScope.Screen>(root)
-    val screens = root.children.map(::buildScreen)
-
-    return Response(screens = screens)
+  internal fun response(root: ProtobufNode.Root): Response = when (root.type) {
+    ResponseType.Screen -> {
+      checkChildrenScope<UiScope.Screen>(root)
+      Response(screens = root.children.map(::buildScreen))
+    }
+    ResponseType.Widget -> {
+      checkChildrenScope<UiScope.Widget>(root)
+      Response(widgets = root.children.map(::buildWidget))
+    }
   }
 
   private fun buildScreen(node: ProtobufNode): Screen {
